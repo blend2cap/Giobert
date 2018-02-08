@@ -1,0 +1,58 @@
+* {
+        -fx-primary:  #212121;
+        -fx-secondary: #ffbb5b;
+        -fx-blue: #4682b4;
+        -fx-primarytext:  #e2e0e0;
+}
+
+
+.root {
+    -fx-background-color: -fx-primary;
+}
+
+.button {
+    -fx-text-fill: -fx-primarytext;
+}
+
+.calculate-button {
+    -fx-border-color: -fx-secondary;
+    -fx-border-radius: 20px;
+    -fx-background-radius: 20px;
+}
+
+.calculate-button :hover{
+    -fx-border-color: -fx-secondary;
+    -fx-background-color: -fx-secondary;
+    -fx-text-fill: -fx-primary;
+}
+
+.text-field {
+    -fx-text-fill: -fx-primarytext;
+    -jfx-focus-color: -fx-secondary;
+}
+
+.chart {
+    -fx-background-color: -fx-primary;
+
+}
+
+.chart-plot-background {
+    -fx-background-color: -fx-primary;
+}
+.chart-title {
+  -fx-text-fill: -fx-primarytext;
+  -fx-font-size: 1.6em;
+}
+
+.chart-series-line {
+-fx-stroke-width: 2px;
+-fx-effect: null;
+}
+
+.default-color0.chart-series-line { -fx-stroke: #e9967a; }
+.default-color1.chart-series-line { -fx-stroke: #f0e68c; }
+.default-color2.chart-series-line { -fx-stroke: #dda0dd; }
+
+.default-color0.chart-line-symbol { -fx-background-color: #e9967a, white; }
+.default-color1.chart-line-symbol { -fx-background-color: #f0e68c, white; }
+.default-color2.chart-line-symbol { -fx-background-color: #dda0dd, white; }

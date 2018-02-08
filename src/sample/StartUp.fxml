@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXTabPane?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import com.jfoenix.controls.JFXTreeTableView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.StackPane?>
+
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="465.0" prefWidth="622.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+   <children>
+      <MenuBar prefHeight="0.0" prefWidth="600.0" StackPane.alignment="TOP_LEFT">
+        <menus>
+          <Menu mnemonicParsing="false" text="File">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Close" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Edit">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Delete" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Help">
+            <items>
+              <MenuItem mnemonicParsing="false" text="About" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+      <JFXTabPane prefHeight="167.0" prefWidth="653.0">
+         <tabs>
+            <Tab text="Visualizza">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="372.0" prefWidth="622.0">
+                  <children>
+                      <JFXTextField fx:id="CostTextField" alignment="CENTER_RIGHT" focusColor="#ffbb5d" layoutX="342.0" layoutY="37.0" promptText="Digita importo" AnchorPane.rightAnchor="145.0" AnchorPane.topAnchor="37.0" />
+                      <JFXButton fx:id="SelectAllButton" buttonType="RAISED" layoutX="497.0" layoutY="37.0" prefHeight="25.0" prefWidth="105.0" ripplerFill="#dddddd" style="-fx-background-color: #dddddd;" text="Seleziona Tutti" textAlignment="JUSTIFY" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="37.0" />
+                      <JFXTreeTableView fx:id="myTable" layoutX="14.0" layoutY="83.0" prefHeight="295.0" prefWidth="588.0" AnchorPane.bottomAnchor="27.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="83.0" />
+                      <JFXTextField fx:id="AScolastico" alignment="CENTER_RIGHT" focusColor="#ffbb5d" layoutX="183.0" layoutY="37.0" promptText="Anno Solare" AnchorPane.rightAnchor="304.0" AnchorPane.topAnchor="37.0" />
+                      <JFXComboBox fx:id="ClasseCombo" layoutX="67.0" layoutY="37.0" promptText="Classe" AnchorPane.rightAnchor="480.0" AnchorPane.topAnchor="37.0" />
+                  </children>
+                  </AnchorPane>
+              </content>
+            </Tab>
+            <Tab text="Inserisci">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+              </content>
+            </Tab>
+         </tabs>
+         <StackPane.margin>
+            <Insets top="25.0" />
+         </StackPane.margin>
+      </JFXTabPane>
+   </children>
+</StackPane>
