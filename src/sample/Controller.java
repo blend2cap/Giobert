@@ -25,9 +25,6 @@ public class Controller extends DBConnection implements Initializable, javafx.be
     ObservableList<String> elencoClassi= getClassListForComboBox();
     ObservableList<String> elencoAnniScolastici = getAnniForComboBox();
 
-    ObservableValue<String> newValueClasse;
-    ObservableValue<String> newValueAnno;
-
     public Controller() throws SQLException, ClassNotFoundException {
     }
 
@@ -60,25 +57,21 @@ public class Controller extends DBConnection implements Initializable, javafx.be
         myTable.setShowRoot(false);
         myTable.getColumns().setAll(colonnaNome, colonnaCognome, colonnaClasse, colonnaGita, colonnaImporto);
         //end table
-        newValueClasse.addListener(this);
-        newValueAnno.addListener(this);
+
         //initialize ComboBoxes
         ClasseCombo.setItems(elencoClassi);
-        ClasseCombo.getSelectionModel().selectedItemProperty().addListener((v, oldValue, newValue) -> newValueClasse=newValue);
+        ClasseCombo.getSelectionModel().selectedItemProperty().addListener(this);
         AnnoScolasticoCombo.setItems(elencoAnniScolastici);
-        AnnoScolasticoCombo.getSelectionModel().selectedItemProperty().addListener((v, oldValue, newValue) -> newValueAnno=newValue.toString());
+        AnnoScolasticoCombo.getSelectionModel().selectedItemProperty().addListener(this);
 
     }
 
-    public void PopulateChangedTable (String newValueClasse, String newValueAnno) throws SQLException, ClassNotFoundException {
-        myTable.getColumns().setAll((TreeTableColumn<Alunno, ?>) getVisualizzaAlunni(newValueClasse, newValueAnno));
-    }
 
     @Override
     public void changed(ObservableValue observable, Object oldValue, Object newValue) {
         try {
-            myTable.getColumns().setAll((TreeTableColumn<Alunno, ?>) getVisualizzaAlunni(newValueClasse.toString(), newValueAnno.toString()));
-            System.out.println(newValueClasse);
+            myTable.getColumns().setAll((TreeTableColumn<Alunno, ?>) getVisualizzaAlunni(ClasseCombo.getValue().toString(), AnnoScolasticoCombo.getValue().toString()));
+
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
