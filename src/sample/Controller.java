@@ -15,63 +15,56 @@ import java.util.ResourceBundle;
 public class Controller extends DBConnection implements Initializable {
 
     @FXML
-    public JFXTreeTableView<Alunno> myTable;
+    private JFXTreeTableView<Alunno> myTable;
     @FXML
-    public JFXTextField AScolastico;
-    public JFXComboBox ClasseCombo;
+    private JFXComboBox ClasseCombo;
+    @FXML
+    private JFXComboBox AnnoScolasticoCombo;
 
-    ObservableList<String> elencoClassi;
+    ObservableList<String> elencoClassi=getClassList();
+    ObservableList<String> elencoAnniScolastici = getAnni();
 
     public Controller() throws SQLException, ClassNotFoundException {
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        JFXTreeTableColumn<Alunno, String> nomeAlunno = new JFXTreeTableColumn<>("Nome");
-        nomeAlunno.setPrefWidth(150);
-        nomeAlunno.setCellValueFactory(param -> param.getValue().getValue().Nome);
+        JFXTreeTableColumn<Alunno, String> colonnaNome = new JFXTreeTableColumn<>("Nome");
+        colonnaNome.setPrefWidth(150);
+        colonnaNome.setCellValueFactory(param -> param.getValue().getValue().Nome);
 
-        JFXTreeTableColumn<Alunno, String> cognomeAlunno = new JFXTreeTableColumn<>("Cognome");
-        nomeAlunno.setPrefWidth(150);
-        nomeAlunno.setCellValueFactory(param -> param.getValue().getValue().Cognome);
+        JFXTreeTableColumn<Alunno, String> colonnaCognome = new JFXTreeTableColumn<>("Cognome");
+        colonnaCognome.setPrefWidth(150);
+        colonnaCognome.setCellValueFactory(param -> param.getValue().getValue().Cognome);
 
-        JFXTreeTableColumn<Alunno, String> Classe = new JFXTreeTableColumn<>("Classe");
-        nomeAlunno.setPrefWidth(150);
-        nomeAlunno.setCellValueFactory(param -> param.getValue().getValue().Classe);
+        JFXTreeTableColumn<Alunno, String> colonnaClasse = new JFXTreeTableColumn<>("Classe");
+        colonnaClasse.setPrefWidth(150);
+        colonnaClasse.setCellValueFactory(param -> param.getValue().getValue().Classe);
 
-        JFXTreeTableColumn<Alunno, String> Gita = new JFXTreeTableColumn<>("Gita");
-        nomeAlunno.setPrefWidth(150);
-        nomeAlunno.setCellValueFactory(param -> param.getValue().getValue().Gita);
+        JFXTreeTableColumn<Alunno, String> colonnaGita = new JFXTreeTableColumn<>("Gita");
+        colonnaGita.setPrefWidth(150);
+        colonnaGita.setCellValueFactory(param -> param.getValue().getValue().Gita);
 
-        JFXTreeTableColumn<Alunno, String> Importo = new JFXTreeTableColumn<>("Importo");
-        nomeAlunno.setPrefWidth(150);
-        nomeAlunno.setCellValueFactory(param -> param.getValue().getValue().Importo);
+        JFXTreeTableColumn<Alunno, String> colonnaImporto = new JFXTreeTableColumn<>("Importo");
+        colonnaImporto.setPrefWidth(150);
+        colonnaImporto.setCellValueFactory(param -> param.getValue().getValue().Importo);
 
         ObservableList<Alunno> alunni = FXCollections.observableArrayList();
-        /*
-        try {
-            alunni = GetAllDataFromAS(AScolastico.getText());
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        */
-        final TreeItem<Alunno> root = new RecursiveTreeItem<>(alunni, RecursiveTreeObject::getChildren);
-        myTable.getColumns().setAll(nomeAlunno, cognomeAlunno, Classe, Gita, Importo);
+        alunni.add(new Alunno("Riccardo", "Capellino", "4AI", "Francoforte", "300"));
+        alunni.add(new Alunno("Zoky", "Micevsky", "4AI", "Francoforte", "300"));
+        final RecursiveTreeItem root = new RecursiveTreeItem<>(alunni, RecursiveTreeObject::getChildren);
         myTable.setRoot(root);
         myTable.setShowRoot(false);
+        myTable.getColumns().setAll(colonnaNome, colonnaCognome, colonnaClasse, colonnaGita, colonnaImporto);
         //end table
+        //initialize ComboBoxes
+        ClasseCombo.setItems(elencoClassi);
+       // ClasseCombo.getSelectionModel().selectedItemProperty().addListener((v, oldValue, newValue) -> );
+        AnnoScolasticoCombo.setItems(elencoAnniScolastici);
 
+    }
 
-        try {
-            elencoClassi=getClassList();
-            ClasseCombo = new JFXComboBox();
-            System.out.println(elencoClassi);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+    public void PopulateChangedTable (String newValue) {
+
     }
 }

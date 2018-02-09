@@ -40,18 +40,21 @@
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="372.0" prefWidth="622.0">
                   <children>
-                      <JFXTextField fx:id="CostTextField" alignment="CENTER_RIGHT" focusColor="#ffbb5d" layoutX="342.0" layoutY="37.0" promptText="Digita importo" AnchorPane.rightAnchor="145.0" AnchorPane.topAnchor="37.0" />
-                      <JFXButton fx:id="SelectAllButton" buttonType="RAISED" layoutX="497.0" layoutY="37.0" prefHeight="25.0" prefWidth="105.0" ripplerFill="#dddddd" style="-fx-background-color: #dddddd;" text="Seleziona Tutti" textAlignment="JUSTIFY" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="37.0" />
+                      <JFXButton fx:id="SelectAllButton" buttonType="RAISED" layoutX="497.0" layoutY="37.0" prefHeight="25.0" prefWidth="105.0" ripplerFill="#13fff7" style="-fx-background-color: #dddddd;" text="Seleziona Tutti" textAlignment="JUSTIFY" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="37.0" />
                       <JFXTreeTableView fx:id="myTable" layoutX="14.0" layoutY="83.0" prefHeight="295.0" prefWidth="588.0" AnchorPane.bottomAnchor="27.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="83.0" />
-                      <JFXTextField fx:id="AScolastico" alignment="CENTER_RIGHT" focusColor="#ffbb5d" layoutX="183.0" layoutY="37.0" promptText="Anno Solare" AnchorPane.rightAnchor="304.0" AnchorPane.topAnchor="37.0" />
-                      <JFXComboBox fx:id="ClasseCombo" layoutX="67.0" layoutY="37.0" promptText="Classe" AnchorPane.rightAnchor="480.0" AnchorPane.topAnchor="37.0" />
+                      <JFXComboBox fx:id="ClasseCombo" layoutX="189.0" layoutY="37.0" promptText="Classe" AnchorPane.rightAnchor="358.0" AnchorPane.topAnchor="37.0" />
+                        <JFXComboBox fx:id="AnnoScolasticoCombo" layoutX="306.0" layoutY="37.0" promptText="Anno Scolastico" AnchorPane.rightAnchor="189.0" AnchorPane.topAnchor="37.0" />
                   </children>
                   </AnchorPane>
               </content>
             </Tab>
             <Tab text="Inserisci">
               <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                      <JFXTextField fx:id="AScolastico" alignment="CENTER_RIGHT" focusColor="#ffbb5d" layoutX="294.0" layoutY="44.0" prefHeight="25.0" prefWidth="147.0" promptText="Inserisci Anno Scolastico" AnchorPane.rightAnchor="200.0" AnchorPane.topAnchor="44.0" />
+                      <JFXTextField fx:id="CostTextField" alignment="CENTER_RIGHT" focusColor="#ffbb5d" layoutX="109.0" layoutY="44.0" promptText="Digita importo" AnchorPane.rightAnchor="378.0" AnchorPane.topAnchor="44.0" />
+                     </children></AnchorPane>
               </content>
             </Tab>
          </tabs>

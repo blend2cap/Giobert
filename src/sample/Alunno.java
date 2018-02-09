@@ -18,4 +18,45 @@ public class Alunno extends RecursiveTreeObject<Alunno> {
         this.Gita = new SimpleStringProperty(Gita);
         this.Importo = new SimpleStringProperty(Importo);
     }
+
+    public void setClasse(String classe) {
+        this.Classe.set(classe);
+    }
+
+    public void setCognome(String cognome) {
+        this.Cognome.set(cognome);
+    }
+
+    public void setGita(String gita) {
+        this.Gita.set(gita);
+    }
+
+    public void setImporto(String importo) {
+        this.Importo.set(importo);
+    }
+
+    public void setNome(String nome) {
+        this.Nome.set(nome);
+    }
+
+    public String getClasse() {
+        return Classe.get();
+    }
+
+    public String getCognome() {
+        return Cognome.get();
+    }
+
+    public String getGita() {
+        return Gita.get();
+    }
+
+    public String getImporto() {
+        return Importo.get();
+    }
+
+    public String getNome() {
+        return Nome.get();
+    }
+
 }

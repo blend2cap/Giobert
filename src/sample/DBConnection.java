@@ -58,13 +58,13 @@ public class DBConnection {
         return locationCostArrayList;
     }
 
-    public ObservableList<Integer> getAnni() throws SQLException, ClassNotFoundException {
-        ObservableList<Integer> anniList = FXCollections.observableArrayList();
+    public ObservableList<String> getAnni() throws SQLException, ClassNotFoundException {
+        ObservableList<String> anniList = FXCollections.observableArrayList();
         if (con == null) getConnection();
         Statement statement = con.createStatement();
         ResultSet resultSet = statement.executeQuery("SELECT * FROM Anno");
         while ( resultSet.next() )
-            anniList.add(resultSet.getInt("anno"));
+            anniList.add(resultSet.getString("anno"));
         return anniList;
     }
 }
