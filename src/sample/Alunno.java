@@ -11,12 +11,12 @@ public class Alunno extends RecursiveTreeObject<Alunno> {
     StringProperty Gita;
     StringProperty Importo;
 
-    public Alunno(String Nome, String Cognome, String Classe, String Gita, String Importo){
+    public Alunno(String Nome, String Cognome, String Classe, String Gita, Double Importo){
         this.Nome=new SimpleStringProperty(Nome);
         this.Cognome = new SimpleStringProperty(Cognome);
         this.Classe = new SimpleStringProperty(Classe);
         this.Gita = new SimpleStringProperty(Gita);
-        this.Importo = new SimpleStringProperty(Importo);
+        this.Importo = new SimpleStringProperty(Importo.toString());
     }
 
     public void setClasse(String classe) {

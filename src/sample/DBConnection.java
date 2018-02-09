@@ -29,12 +29,12 @@ public class DBConnection {
         con = DriverManager.getConnection("jdbc:sqlite:DB.db");
     }
 
-    public ObservableList<String> getClassList() throws SQLException, ClassNotFoundException {
+    public ObservableList<String> getClassListForComboBox() throws SQLException, ClassNotFoundException {
         ObservableList<String> classi = FXCollections.observableArrayList();
         if (con == null) getConnection();
         Statement statement = con.createStatement();
         ResultSet resultSet = statement.executeQuery("SELECT * FROM Classi");
-        while ( resultSet.next() ) classi.add(new String(resultSet.getString("classe")));
+        while ( resultSet.next() ) classi.add(resultSet.getString("classe"));
         return classi;
     }
 
@@ -54,11 +54,11 @@ public class DBConnection {
         Statement statement = con.createStatement();
         ResultSet resultSet = statement.executeQuery("SELECT * FROM Gite");
         while ( resultSet.next() )
-            locationCostArrayList.add(new LocationCost(resultSet.getString("location"), resultSet.getDouble("costo")));
+            locationCostArrayList.add(new LocationCost(resultSet.getString("location"), resultSet.getDouble("cost")));
         return locationCostArrayList;
     }
 
-    public ObservableList<String> getAnni() throws SQLException, ClassNotFoundException {
+    public ObservableList<String> getAnniForComboBox() throws SQLException, ClassNotFoundException {
         ObservableList<String> anniList = FXCollections.observableArrayList();
         if (con == null) getConnection();
         Statement statement = con.createStatement();
@@ -66,5 +66,38 @@ public class DBConnection {
         while ( resultSet.next() )
             anniList.add(resultSet.getString("anno"));
         return anniList;
+    }
+
+    //map to use in getVisualizzaAlunni
+    public HashMap<String, NameSurname> AlunnoMap () throws SQLException, ClassNotFoundException {
+        HashMap<String, NameSurname> map = new HashMap<>();
+        if (con == null) getConnection();
+        Statement statement = con.createStatement();
+        ResultSet resultSet = statement.executeQuery("SELECT * FROM Studenti");
+        while ( resultSet.next() )  map.put(resultSet.getString("id"), new NameSurname(resultSet.getString("nome"), resultSet.getString("cognome")));
+        return map;
+    }
+
+    public  HashMap<String, LocationCost> GitaMap () throws SQLException, ClassNotFoundException {
+        HashMap<String, LocationCost> map = new HashMap<>();
+        if (con == null) getConnection();
+        Statement statement = con.createStatement();
+        ResultSet resultSet = statement.executeQuery("SELECT * FROM Gite");
+        while ( resultSet.next() )  map.put(resultSet.getString("id"), new LocationCost(resultSet.getString("location"), resultSet.getDouble("cost")));
+        return map;
+    }
+
+    public ObservableList<Alunno> getVisualizzaAlunni (String classe, String annoScolastico) throws SQLException, ClassNotFoundException {
+        ObservableList<Alunno> alunnoObservableList = FXCollections.observableArrayList();
+        if (con == null) getConnection();
+        Statement statement = con.createStatement();
+        ResultSet resultSet = statement.executeQuery("SELECT * FROM Classi WHERE classe='"+classe+"'");
+        String classeId=resultSet.getString("id"); //stores the id of the selected class
+        ResultSet resultSet1 = statement.executeQuery("SELECT * FROM Anno WHERE anno='"+annoScolastico+"'");
+        String annoId=resultSet.getString("id"); //stores the id of the selected school year
+        ResultSet resultSet2 = statement.executeQuery("SELECT * FROM Final WHERE classeID='"+classeId+"' AND annoID='"+annoId+"'");
+        while ( resultSet2.next() )
+            alunnoObservableList.add(new Alunno(AlunnoMap().get("id").getName(), AlunnoMap().get("id").getSurname(), classe, GitaMap().get("id").getLocation(), GitaMap().get("id").getCost() ));
+        return alunnoObservableList;
     }
 }
