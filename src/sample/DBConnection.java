@@ -1,10 +1,8 @@
 package sample;
 
-import javafx.beans.InvalidationListener;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-import sample.Repositories.LocationCost;
+import sample.Repositories.Gita;
 import sample.Repositories.NameSurname;
 
 import java.sql.*;
@@ -48,13 +46,13 @@ public class DBConnection {
         return nameSurnames;
     }
 
-    public ObservableList<LocationCost> getLocationCostList() throws SQLException, ClassNotFoundException {
-        ObservableList<LocationCost> locationCostArrayList = FXCollections.observableArrayList();
+    public ObservableList<Gita> getLocationCostList() throws SQLException, ClassNotFoundException {
+        ObservableList<Gita> locationCostArrayList = FXCollections.observableArrayList();
         if (con == null) getConnection();
         Statement statement = con.createStatement();
         ResultSet resultSet = statement.executeQuery("SELECT * FROM Gite");
         while ( resultSet.next() )
-            locationCostArrayList.add(new LocationCost(resultSet.getString("location"), resultSet.getDouble("cost")));
+            locationCostArrayList.add(new Gita(resultSet.getString("location"), resultSet.getDouble("cost")));
         return locationCostArrayList;
     }
 
@@ -78,26 +76,32 @@ public class DBConnection {
         return map;
     }
 
-    public  HashMap<String, LocationCost> GitaMap () throws SQLException, ClassNotFoundException {
-        HashMap<String, LocationCost> map = new HashMap<>();
+    public  HashMap<String, Gita> GitaMap () throws SQLException, ClassNotFoundException {
+        HashMap<String, Gita> map = new HashMap<>();
         if (con == null) getConnection();
         Statement statement = con.createStatement();
         ResultSet resultSet = statement.executeQuery("SELECT * FROM Gite");
-        while ( resultSet.next() )  map.put(resultSet.getString("id"), new LocationCost(resultSet.getString("location"), resultSet.getDouble("cost")));
+        while ( resultSet.next() )  map.put(resultSet.getString("id"), new Gita(resultSet.getString("location"), resultSet.getDouble("cost")));
         return map;
     }
 
     public ObservableList<Alunno> getVisualizzaAlunni (String classe, String annoScolastico) throws SQLException, ClassNotFoundException {
         ObservableList<Alunno> alunnoObservableList = FXCollections.observableArrayList();
         if (con == null) getConnection();
+
         Statement statement = con.createStatement();
-        ResultSet resultSet = statement.executeQuery("SELECT * FROM Classi WHERE classe='"+classe+"'");
-        String classeId=resultSet.getString("id"); //stores the id of the selected class
-        ResultSet resultSet1 = statement.executeQuery("SELECT * FROM Anno WHERE anno='"+annoScolastico+"'");
-        String annoId=resultSet.getString("id"); //stores the id of the selected school year
-        ResultSet resultSet2 = statement.executeQuery("SELECT * FROM Final WHERE classeID='"+classeId+"' AND annoID='"+annoId+"'");
-        while ( resultSet2.next() )
-            alunnoObservableList.add(new Alunno(AlunnoMap().get("id").getName(), AlunnoMap().get("id").getSurname(), classe, GitaMap().get("id").getLocation(), GitaMap().get("id").getCost() ));
+        ResultSet classResultSet = statement.executeQuery("SELECT * FROM Classi WHERE classe='"+classe+"'");
+        String classeId=classResultSet.getString("id"); //stores the id of the selected class
+
+        ResultSet annoResultSet = statement.executeQuery("SELECT * FROM Anno WHERE anno='"+annoScolastico+"'");
+        String annoId=annoResultSet.getString("id"); //stores the id of the selected school year
+
+        ResultSet finalResultSet = statement.executeQuery("SELECT * FROM Final WHERE classeID='"+classeId+"' AND annoID='"+annoId+"'");
+        while ( finalResultSet.next() ) {
+            String idAlunno= finalResultSet.getString("studenteID");
+            String idGita = finalResultSet.getString("gitaID");
+            alunnoObservableList.add(new Alunno(AlunnoMap().get(idAlunno).getName(), AlunnoMap().get(idAlunno).getSurname(), classe, GitaMap().get(idGita).getLocation(), GitaMap().get(idGita).getCost()));
+        }
         return alunnoObservableList;
     }
 }

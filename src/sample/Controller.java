@@ -70,7 +70,12 @@ public class Controller extends DBConnection implements Initializable, javafx.be
     @Override
     public void changed(ObservableValue observable, Object oldValue, Object newValue) {
         try {
-            myTable.getColumns().setAll((TreeTableColumn<Alunno, ?>) getVisualizzaAlunni(ClasseCombo.getValue().toString(), AnnoScolasticoCombo.getValue().toString()));
+            if (ClasseCombo.getValue()!=null && AnnoScolasticoCombo.getValue()!=null) {
+                ObservableList<Alunno> observableList = getVisualizzaAlunni(ClasseCombo.getValue().toString(), AnnoScolasticoCombo.getValue().toString());
+                RecursiveTreeItem root = new RecursiveTreeItem<>(observableList, RecursiveTreeObject::getChildren);
+                myTable.setRoot(root);
+                myTable.setShowRoot(false);
+            }
 
         } catch (SQLException e) {
             e.printStackTrace();

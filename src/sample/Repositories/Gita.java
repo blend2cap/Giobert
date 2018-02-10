@@ -1,10 +1,10 @@
 package sample.Repositories;
 
-public class LocationCost {
+public class Gita {
     private String location;
     private Double cost;
 
-    public LocationCost(String location, Double cost){
+    public Gita(String location, Double cost){
         this.location=location;
         this.cost=cost;
     }
