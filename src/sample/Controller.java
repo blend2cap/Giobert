@@ -6,16 +6,23 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
+import javafx.stage.Stage;
 
-
+import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class Controller extends DBConnection implements Initializable, javafx.beans.value.ChangeListener {
+
+    @FXML
+    private ControllerGita controllerGita;
 
     @FXML
     private JFXTreeTableView<Alunno> myTable;
@@ -25,6 +32,8 @@ public class Controller extends DBConnection implements Initializable, javafx.be
     private JFXComboBox AnnoScolasticoCombo;
     @FXML
     Menu fileMenu = new Menu();
+    @FXML
+    MenuItem inserisciGita = new MenuItem();
 
     ObservableList<String> elencoClassi= getClassListForComboBox();
     ObservableList<String> elencoAnniScolastici = getAnniForComboBox();
@@ -32,8 +41,11 @@ public class Controller extends DBConnection implements Initializable, javafx.be
     public Controller() throws SQLException, ClassNotFoundException {
     }
 
+
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
         JFXTreeTableColumn<Alunno, String> colonnaNome = new JFXTreeTableColumn<>("Nome");
         colonnaNome.setPrefWidth(150);
         colonnaNome.setCellValueFactory(param -> param.getValue().getValue().Nome);
@@ -72,8 +84,21 @@ public class Controller extends DBConnection implements Initializable, javafx.be
         AnnoScolasticoCombo.setItems(elencoAnniScolastici);
         AnnoScolasticoCombo.getSelectionModel().selectedItemProperty().addListener(this);
 
+
     }
 
+    @FXML
+    public void InserisciGita() throws IOException, SQLException, ClassNotFoundException {
+        Stage stage = new Stage();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("InserisciGita.fxml"));
+        stage.setScene(new Scene(FXMLLoader.load(getClass().getResource("InserisciGita.fxml"))));
+        stage.setTitle("Inserisci Gita");
+        stage.setResizable(false);
+        stage.show();
+        Parent root = loader.load();
+        ControllerGita controllerGita = loader.getController();
+
+    }
 
     @Override
     public void changed(ObservableValue observable, Object oldValue, Object newValue) {
@@ -91,4 +116,5 @@ public class Controller extends DBConnection implements Initializable, javafx.be
             e.printStackTrace();
         }
     }
+
 }

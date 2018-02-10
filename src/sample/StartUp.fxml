@@ -19,7 +19,7 @@
         <menus>
           <Menu fx:id="fileMenu" mnemonicParsing="false" text="File">
             <items>
-              <MenuItem mnemonicParsing="false" text="Inserisci Gita" />
+              <MenuItem fx:id="inserisciGita" mnemonicParsing="false" onAction="#InserisciGita" text="Inserisci Gita" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Edit">
@@ -51,14 +51,14 @@
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                      <JFXTextField fx:id="AScolastico" focusColor="#ffbb5d" layoutX="21.0" layoutY="271.0" prefHeight="25.0" prefWidth="95.0" promptText="Anno Scolastico" AnchorPane.rightAnchor="506.0" AnchorPane.topAnchor="271.0" />
-                      <JFXTextField fx:id="CostTextField" focusColor="#ffbb5d" layoutX="21.0" layoutY="46.0" prefHeight="25.0" prefWidth="63.0" promptText="Nome" AnchorPane.rightAnchor="538.0" AnchorPane.topAnchor="46.0" />
-                      <JFXButton fx:id="SelectAllButton" buttonType="RAISED" layoutX="16.0" layoutY="337.0" prefHeight="25.0" prefWidth="105.0" ripplerFill="#13fff7" style="-fx-background-color: #dddddd;" text="Aggiungi" textAlignment="JUSTIFY" AnchorPane.rightAnchor="501.0" AnchorPane.topAnchor="337.0" />
-                        <JFXTextField fx:id="CostTextField1" focusColor="#ffbb5d" layoutX="21.0" layoutY="88.0" prefHeight="25.0" prefWidth="63.0" promptText="Cognome" />
-                        <JFXTextField fx:id="CostTextField11" focusColor="#ffbb5d" layoutX="21.0" layoutY="134.0" prefHeight="18.0" prefWidth="63.0" promptText="Classe" />
-                        <JFXTextField fx:id="CostTextField111" focusColor="#ffbb5d" layoutX="21.0" layoutY="180.0" prefHeight="18.0" prefWidth="63.0" promptText="Gita" />
-                        <JFXTextField fx:id="CostTextField1111" focusColor="#ffbb5d" layoutX="21.0" layoutY="226.0" prefHeight="18.0" prefWidth="63.0" promptText="Importo" />
-                        <JFXTreeTableView layoutX="158.0" layoutY="14.0" prefHeight="379.0" prefWidth="452.0" />
+                      <JFXTextField fx:id="InsAS" focusColor="#ffbb5d" layoutX="21.0" layoutY="271.0" prefHeight="25.0" prefWidth="95.0" promptText="Anno Scolastico" AnchorPane.leftAnchor="21.0" AnchorPane.topAnchor="270.0" />
+                      <JFXTextField fx:id="inserisciNome" focusColor="#ffbb5d" layoutX="21.0" layoutY="46.0" prefHeight="25.0" prefWidth="63.0" promptText="Nome" AnchorPane.leftAnchor="21.0" AnchorPane.topAnchor="46.0" />
+                      <JFXButton buttonType="RAISED" layoutX="16.0" layoutY="337.0" prefHeight="25.0" prefWidth="105.0" ripplerFill="#13fff7" style="-fx-background-color: #dddddd;" text="Aggiungi" textAlignment="JUSTIFY" AnchorPane.leftAnchor="16.0" AnchorPane.topAnchor="337.0" />
+                        <JFXTextField fx:id="inserisciCognome" focusColor="#ffbb5d" layoutX="21.0" layoutY="88.0" prefHeight="25.0" prefWidth="63.0" promptText="Cognome" AnchorPane.leftAnchor="21.0" AnchorPane.topAnchor="88.0" />
+                        <JFXTextField fx:id="inserisciImporto" focusColor="#ffbb5d" layoutX="21.0" layoutY="226.0" prefHeight="18.0" prefWidth="63.0" promptText="Importo" AnchorPane.leftAnchor="21.0" AnchorPane.topAnchor="226.0" />
+                        <JFXTreeTableView layoutX="158.0" layoutY="14.0" prefHeight="379.0" prefWidth="452.0" AnchorPane.bottomAnchor="12.0" AnchorPane.leftAnchor="158.0" AnchorPane.rightAnchor="12.0" AnchorPane.topAnchor="14.0" />
+                        <JFXComboBox fx:id="inserisciGitaCombo" layoutX="21.0" layoutY="179.0" promptText="Gita" AnchorPane.leftAnchor="21.0" AnchorPane.topAnchor="185.0" />
+                        <JFXComboBox fx:id="inserisciClasseCombo" layoutX="21.0" layoutY="137.0" promptText="Classe" AnchorPane.leftAnchor="21.0" AnchorPane.topAnchor="137.0" />
                      </children></AnchorPane>
               </content>
             </Tab>

@@ -40,6 +40,18 @@ public class DBConnection {
         return anniList;
     }
 
+    public ObservableList<String> getGiteForCombo() throws SQLException, ClassNotFoundException {
+        ObservableList<String> observableList = FXCollections.observableArrayList();
+        if (con==null) getConnection();
+        Statement statement = con.createStatement();
+        ResultSet resultSet = statement.executeQuery("SELECT * FROM Gite");
+        while ( resultSet.next() )
+            observableList.add(resultSet.getString("location"));
+        con.close();
+        return  observableList;
+    }
+
+
     //map to use in getVisualizzaAlunni
     public HashMap<String, NameSurname> AlunnoMap () throws SQLException, ClassNotFoundException {
         HashMap<String, NameSurname> map = new HashMap<>();
@@ -77,5 +89,15 @@ public class DBConnection {
             alunnoObservableList.add(new Alunno(AlunnoMap().get(idAlunno).getName(), AlunnoMap().get(idAlunno).getSurname(), classe, GitaMap().get(idGita).getLocation(), GitaMap().get(idGita).getCost(), GitaMap().get(idGita).getMonth()));
         }
         return alunnoObservableList;
+    }
+
+    public void addGitaDB(Gita gita) throws SQLException, ClassNotFoundException {
+        if (con==null)
+            getConnection();
+        PreparedStatement preparedStatement=con.prepareStatement("INSERT INTO Gite values(?,?,?,?);");
+        preparedStatement.setString(2, gita.getLocation());
+        preparedStatement.setString(3, gita.getCost().toString());
+        preparedStatement.setString(4,gita.getLocation());
+        preparedStatement.execute();
     }
 }

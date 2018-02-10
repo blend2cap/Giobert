@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="306.0" prefWidth="221.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.ControllerGita">
+   <children>
+      <JFXTextField fx:id="destinazione" layoutX="43.0" layoutY="72.0" promptText="Destinazione" />
+      <JFXTextField fx:id="costo" layoutX="43.0" layoutY="126.0" promptText="Costo" />
+      <JFXTextField fx:id="mese" layoutX="43.0" layoutY="189.0" promptText="Mese" />
+      <JFXButton buttonType="RAISED" layoutX="82.0" layoutY="252.0" onAction="#CreateGitaObject" style="-fx-background-color: #a5f7f1;" text="Inserisci" />
+   </children>
+</AnchorPane>
