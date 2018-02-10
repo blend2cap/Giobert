@@ -15,13 +15,6 @@ public class DBConnection {
     public DBConnection() throws SQLException {
     }
 
-    public ResultSet displayData() throws ClassNotFoundException, SQLException {
-        if (con == null)
-            getConnection();
-        Statement statement = con.createStatement();
-        return statement.executeQuery("SELECT Nome, Cognome, Classe, Gita, Importo from AS");
-    }
-
     public void getConnection() throws ClassNotFoundException, SQLException {
         Class.forName("org.sqlite.JDBC");
         con = DriverManager.getConnection("jdbc:sqlite:DB.db");
@@ -36,25 +29,6 @@ public class DBConnection {
         return classi;
     }
 
-    public ObservableList<NameSurname> getNameSurnameList() throws SQLException, ClassNotFoundException {
-        ObservableList<NameSurname> nameSurnames = FXCollections.observableArrayList();
-        if (con == null) getConnection();
-        Statement statement = con.createStatement();
-        ResultSet resultSet = statement.executeQuery("SELECT * FROM Studenti");
-        while ( resultSet.next() )
-            nameSurnames.add(new NameSurname(resultSet.getString("nome"), resultSet.getString("cognome")));
-        return nameSurnames;
-    }
-
-    public ObservableList<Gita> getLocationCostList() throws SQLException, ClassNotFoundException {
-        ObservableList<Gita> locationCostArrayList = FXCollections.observableArrayList();
-        if (con == null) getConnection();
-        Statement statement = con.createStatement();
-        ResultSet resultSet = statement.executeQuery("SELECT * FROM Gite");
-        while ( resultSet.next() )
-            locationCostArrayList.add(new Gita(resultSet.getString("location"), resultSet.getDouble("cost")));
-        return locationCostArrayList;
-    }
 
     public ObservableList<String> getAnniForComboBox() throws SQLException, ClassNotFoundException {
         ObservableList<String> anniList = FXCollections.observableArrayList();
@@ -81,7 +55,7 @@ public class DBConnection {
         if (con == null) getConnection();
         Statement statement = con.createStatement();
         ResultSet resultSet = statement.executeQuery("SELECT * FROM Gite");
-        while ( resultSet.next() )  map.put(resultSet.getString("id"), new Gita(resultSet.getString("location"), resultSet.getDouble("cost")));
+        while ( resultSet.next() )  map.put(resultSet.getString("id"), new Gita(resultSet.getString("location"), resultSet.getDouble("cost"), resultSet.getString("month")));
         return map;
     }
 
@@ -100,7 +74,7 @@ public class DBConnection {
         while ( finalResultSet.next() ) {
             String idAlunno= finalResultSet.getString("studenteID");
             String idGita = finalResultSet.getString("gitaID");
-            alunnoObservableList.add(new Alunno(AlunnoMap().get(idAlunno).getName(), AlunnoMap().get(idAlunno).getSurname(), classe, GitaMap().get(idGita).getLocation(), GitaMap().get(idGita).getCost()));
+            alunnoObservableList.add(new Alunno(AlunnoMap().get(idAlunno).getName(), AlunnoMap().get(idAlunno).getSurname(), classe, GitaMap().get(idGita).getLocation(), GitaMap().get(idGita).getCost(), GitaMap().get(idGita).getMonth()));
         }
         return alunnoObservableList;
     }

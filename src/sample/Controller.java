@@ -7,7 +7,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.TreeTableColumn;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuItem;
+
 
 import java.net.URL;
 import java.sql.SQLException;
@@ -21,6 +23,8 @@ public class Controller extends DBConnection implements Initializable, javafx.be
     private JFXComboBox ClasseCombo;
     @FXML
     private JFXComboBox AnnoScolasticoCombo;
+    @FXML
+    Menu fileMenu = new Menu();
 
     ObservableList<String> elencoClassi= getClassListForComboBox();
     ObservableList<String> elencoAnniScolastici = getAnniForComboBox();
@@ -50,12 +54,16 @@ public class Controller extends DBConnection implements Initializable, javafx.be
         colonnaImporto.setPrefWidth(150);
         colonnaImporto.setCellValueFactory(param -> param.getValue().getValue().Importo);
 
+        JFXTreeTableColumn<Alunno, String> colonnaMese = new JFXTreeTableColumn<>("Mese");
+        colonnaMese.setPrefWidth(150);
+        colonnaMese.setCellValueFactory(param -> param.getValue().getValue().Mese);
+
         ObservableList<Alunno> alunni = FXCollections.observableArrayList();
 
         final RecursiveTreeItem root = new RecursiveTreeItem<>(alunni, RecursiveTreeObject::getChildren);
         myTable.setRoot(root);
         myTable.setShowRoot(false);
-        myTable.getColumns().setAll(colonnaNome, colonnaCognome, colonnaClasse, colonnaGita, colonnaImporto);
+        myTable.getColumns().setAll(colonnaNome, colonnaCognome, colonnaClasse, colonnaGita, colonnaImporto, colonnaMese);
         //end table
 
         //initialize ComboBoxes
