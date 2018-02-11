@@ -2,6 +2,7 @@ package sample;
 
 import com.jfoenix.controls.*;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -13,12 +14,14 @@ import javafx.scene.Scene;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Tab;
+import javafx.scene.control.TreeItem;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
+import java.util.function.Predicate;
 
 public class Controller extends DBConnection implements Initializable, javafx.beans.value.ChangeListener {
 
@@ -29,6 +32,9 @@ public class Controller extends DBConnection implements Initializable, javafx.be
 
     @FXML
     private Tab VisualizzaTab;
+
+    @FXML
+    private JFXTextField cercaAlunno;
 
     @FXML
     private JFXTreeTableView<Alunno> myTable;
@@ -91,6 +97,9 @@ public class Controller extends DBConnection implements Initializable, javafx.be
         AnnoScolasticoCombo.setItems(elencoAnniScolastici);
         AnnoScolasticoCombo.getSelectionModel().selectedItemProperty().addListener(this);
 
+        cercaAlunno.textProperty().addListener((observable, oldValue, newValue) ->
+                myTable.setPredicate(alunnoTreeItem -> alunnoTreeItem.getValue().Cognome.getValue().contains(newValue) ||
+                alunnoTreeItem.getValue().Gita.getValue().contains(newValue)));
 
     }
 
