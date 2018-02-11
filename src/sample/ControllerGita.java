@@ -3,21 +3,17 @@ package sample;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.validation.NumberValidator;
 import com.jfoenix.validation.RequiredFieldValidator;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import sample.Repositories.Gita;
 
-import java.awt.geom.Arc2D;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class ControllerGita extends DBConnection implements Initializable  {
 
-    private Controller mainController;
 
     @FXML
     private JFXTextField destinazione;

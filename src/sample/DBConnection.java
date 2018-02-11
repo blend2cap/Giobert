@@ -47,7 +47,7 @@ public class DBConnection {
         ResultSet resultSet = statement.executeQuery("SELECT * FROM Gite");
         while ( resultSet.next() )
             observableList.add(resultSet.getString("location"));
-        con.close();
+
         return  observableList;
     }
 
@@ -100,4 +100,36 @@ public class DBConnection {
         preparedStatement.setString(4,gita.getLocation());
         preparedStatement.execute();
     }
+
+    //this won't work because hasmaps are different
+    public String findIDfromMap(String value, HashMap<?,?> hashMap) {
+        for (HashMap.Entry entry: hashMap.entrySet())
+            if (value.equals(entry.getValue())){
+                return (String) entry.getKey();
+            }
+        return null;
+    }
+
+
+    public boolean checkIfPresent(String id, String tableName ) throws SQLException, ClassNotFoundException { //id of the item from TextField to check
+        ArrayList<String> idList = new ArrayList<>();
+        if (con==null)  getConnection();
+        Statement statement=con.createStatement();
+        ResultSet resultSet=statement.executeQuery("SELECT id FROM "+tableName);
+        while ( resultSet.next() )  idList.add(resultSet.getString("id"));
+        return idList.contains(id) ? true : false;
+    }
+/*
+    public void addAlunnoDB(Alunno alunno) throws SQLException, ClassNotFoundException {
+        if (con==null)  getConnection();
+        HashMap.Entry entry =
+        if (checkIfPresent(, "Studenti"))
+
+
+        PreparedStatement preparedStatement = con.prepareStatement("INSERT INTO Studenti values(?,?,?);");
+        preparedStatement.setString(2, alunno.getNome());
+        preparedStatement.setString(3,alunno.getCognome());
+
+    }
+    */
 }

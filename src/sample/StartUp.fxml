@@ -36,7 +36,7 @@
       </MenuBar>
       <JFXTabPane prefHeight="167.0" prefWidth="653.0">
          <tabs>
-            <Tab text="Visualizza">
+            <Tab fx:id="VisualizzaTab" text="Visualizza">
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="372.0" prefWidth="622.0">
                   <children>
@@ -47,20 +47,10 @@
                   </AnchorPane>
               </content>
             </Tab>
-            <Tab text="Inserisci">
-              <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                     <children>
-                      <JFXTextField fx:id="InsAS" focusColor="#ffbb5d" layoutX="21.0" layoutY="271.0" prefHeight="25.0" prefWidth="95.0" promptText="Anno Scolastico" AnchorPane.leftAnchor="21.0" AnchorPane.topAnchor="270.0" />
-                      <JFXTextField fx:id="inserisciNome" focusColor="#ffbb5d" layoutX="21.0" layoutY="46.0" prefHeight="25.0" prefWidth="63.0" promptText="Nome" AnchorPane.leftAnchor="21.0" AnchorPane.topAnchor="46.0" />
-                      <JFXButton buttonType="RAISED" layoutX="16.0" layoutY="337.0" prefHeight="25.0" prefWidth="105.0" ripplerFill="#13fff7" style="-fx-background-color: #dddddd;" text="Aggiungi" textAlignment="JUSTIFY" AnchorPane.leftAnchor="16.0" AnchorPane.topAnchor="337.0" />
-                        <JFXTextField fx:id="inserisciCognome" focusColor="#ffbb5d" layoutX="21.0" layoutY="88.0" prefHeight="25.0" prefWidth="63.0" promptText="Cognome" AnchorPane.leftAnchor="21.0" AnchorPane.topAnchor="88.0" />
-                        <JFXTextField fx:id="inserisciImporto" focusColor="#ffbb5d" layoutX="21.0" layoutY="226.0" prefHeight="18.0" prefWidth="63.0" promptText="Importo" AnchorPane.leftAnchor="21.0" AnchorPane.topAnchor="226.0" />
-                        <JFXTreeTableView layoutX="158.0" layoutY="14.0" prefHeight="379.0" prefWidth="452.0" AnchorPane.bottomAnchor="12.0" AnchorPane.leftAnchor="158.0" AnchorPane.rightAnchor="12.0" AnchorPane.topAnchor="14.0" />
-                        <JFXComboBox fx:id="inserisciGitaCombo" layoutX="21.0" layoutY="179.0" promptText="Gita" AnchorPane.leftAnchor="21.0" AnchorPane.topAnchor="185.0" />
-                        <JFXComboBox fx:id="inserisciClasseCombo" layoutX="21.0" layoutY="137.0" promptText="Classe" AnchorPane.leftAnchor="21.0" AnchorPane.topAnchor="137.0" />
-                     </children></AnchorPane>
-              </content>
+            <Tab fx:id="InserisciTab" text="Inserisci">
+               <content>
+                   <fx:include fx:id="controllerInserisci" source="InserisciTab.fxml" />
+               </content>
             </Tab>
          </tabs>
          <StackPane.margin>

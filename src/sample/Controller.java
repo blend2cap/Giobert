@@ -12,6 +12,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.Tab;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -23,6 +24,11 @@ public class Controller extends DBConnection implements Initializable, javafx.be
 
     @FXML
     private ControllerGita controllerGita;
+
+
+
+    @FXML
+    private Tab VisualizzaTab;
 
     @FXML
     private JFXTreeTableView<Alunno> myTable;
@@ -46,13 +52,14 @@ public class Controller extends DBConnection implements Initializable, javafx.be
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
+        JFXTreeTableColumn<Alunno, String> colonnaCognome = new JFXTreeTableColumn<>("Cognome");
+        colonnaCognome.setPrefWidth(150);
+        colonnaCognome.setCellValueFactory(param -> param.getValue().getValue().Cognome);
+
         JFXTreeTableColumn<Alunno, String> colonnaNome = new JFXTreeTableColumn<>("Nome");
         colonnaNome.setPrefWidth(150);
         colonnaNome.setCellValueFactory(param -> param.getValue().getValue().Nome);
 
-        JFXTreeTableColumn<Alunno, String> colonnaCognome = new JFXTreeTableColumn<>("Cognome");
-        colonnaCognome.setPrefWidth(150);
-        colonnaCognome.setCellValueFactory(param -> param.getValue().getValue().Cognome);
 
         JFXTreeTableColumn<Alunno, String> colonnaClasse = new JFXTreeTableColumn<>("Classe");
         colonnaClasse.setPrefWidth(150);
@@ -75,7 +82,7 @@ public class Controller extends DBConnection implements Initializable, javafx.be
         final RecursiveTreeItem root = new RecursiveTreeItem<>(alunni, RecursiveTreeObject::getChildren);
         myTable.setRoot(root);
         myTable.setShowRoot(false);
-        myTable.getColumns().setAll(colonnaNome, colonnaCognome, colonnaClasse, colonnaGita, colonnaImporto, colonnaMese);
+        myTable.getColumns().setAll(colonnaCognome, colonnaNome, colonnaClasse, colonnaGita, colonnaImporto, colonnaMese);
         //end table
 
         //initialize ComboBoxes
