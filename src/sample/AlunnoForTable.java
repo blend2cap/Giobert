@@ -4,7 +4,7 @@ import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-public class Alunno extends RecursiveTreeObject<Alunno> {
+public class AlunnoForTable extends RecursiveTreeObject<AlunnoForTable> {
     StringProperty Nome;
     StringProperty Cognome;
     StringProperty Classe;
@@ -12,7 +12,7 @@ public class Alunno extends RecursiveTreeObject<Alunno> {
     StringProperty Importo;
     StringProperty Mese;
 
-    public Alunno(String Nome, String Cognome, String Classe, String Gita, Double Importo, String Mese){
+    public AlunnoForTable(String Nome, String Cognome, String Classe, String Gita, Double Importo, String Mese){
         this.Nome=new SimpleStringProperty(Nome);
         this.Cognome = new SimpleStringProperty(Cognome);
         this.Classe = new SimpleStringProperty(Classe);

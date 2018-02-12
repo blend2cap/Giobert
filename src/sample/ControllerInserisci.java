@@ -3,25 +3,25 @@ package sample;
 import com.jfoenix.controls.*;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import com.jfoenix.validation.RequiredFieldValidator;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Tab;
+import sample.Repositories.Alunno;
+import sample.Repositories.Gita;
+import sample.Repositories.NameSurname;
 
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class ControllerInserisci extends DBConnection implements Initializable {
 
-    public ControllerInserisci() throws SQLException, ClassNotFoundException {
-    }
 
     @FXML
-    private JFXTreeTableView<Alunno> myTable;
+    private JFXTreeTableView<AlunnoForTable> myTable;
 
     @FXML
     private JFXTextField InsAS;
@@ -42,11 +42,29 @@ public class ControllerInserisci extends DBConnection implements Initializable {
     @FXML
     JFXButton aggiungiButton;
 
-    ObservableList<String> elencoClassi = getClassListForComboBox();
-    ObservableList<String> elencoGite = getGiteForCombo();
+    ObservableList<String> elencoClassi;
+    ObservableList<String> elencoGite;
 
-    public void AggiungiButton(){
-            //conversione textfield in Aluuno
+    public ControllerInserisci() throws SQLException, ClassNotFoundException {
+        elencoClassi=getClassListForComboBox();
+        elencoGite=getGiteForCombo();
+    }
+
+
+    public void AggiungiButton() throws SQLException, ClassNotFoundException {
+        HashMap<String, Gita> map=GitaMap();
+        String id = null;
+        //find id
+        for ( String o:map.keySet() )
+            if (Objects.equals(map.get(o).getLocation(), inserisciGitaCombo.getValue())) {
+                id=o;
+                break;
+            }
+        Alunno alunno = new Alunno(new NameSurname(inserisciNome.getText(), inserisciCognome.getText()), inserisciClasseCombo.getValue(),
+                new Gita(map.get(id).getLocation(), map.get(id).getCost(), map.get(id).getMonth()), InsAS.getText());
+        addStudenteDB(alunno.nomeCognome);
+        addAnnoDB(InsAS.getText());
+        addFinalDB(alunno);
     }
 
 
@@ -70,34 +88,36 @@ public class ControllerInserisci extends DBConnection implements Initializable {
 
         //Initialize ComboBox
         inserisciGitaCombo.setItems(elencoGite);
+       // inserisciGitaCombo.getSelectionModel().selectedItemProperty().addListener((ChangeListener<? super String>) this);
         inserisciClasseCombo.setItems(elencoClassi);
+        //inserisciClasseCombo.getSelectionModel().selectedItemProperty().addListener((ChangeListener<? super String>) this);
 
 
-        JFXTreeTableColumn<Alunno, String> colonnaNome = new JFXTreeTableColumn<>("Nome");
+        JFXTreeTableColumn<AlunnoForTable, String> colonnaNome = new JFXTreeTableColumn<>("Nome");
         colonnaNome.setPrefWidth(150);
         colonnaNome.setCellValueFactory(param -> param.getValue().getValue().Nome);
 
-        JFXTreeTableColumn<Alunno, String> colonnaCognome = new JFXTreeTableColumn<>("Cognome");
+        JFXTreeTableColumn<AlunnoForTable, String> colonnaCognome = new JFXTreeTableColumn<>("Cognome");
         colonnaCognome.setPrefWidth(150);
         colonnaCognome.setCellValueFactory(param -> param.getValue().getValue().Cognome);
 
-        JFXTreeTableColumn<Alunno, String> colonnaClasse = new JFXTreeTableColumn<>("Classe");
+        JFXTreeTableColumn<AlunnoForTable, String> colonnaClasse = new JFXTreeTableColumn<>("Classe");
         colonnaClasse.setPrefWidth(150);
         colonnaClasse.setCellValueFactory(param -> param.getValue().getValue().Classe);
 
-        JFXTreeTableColumn<Alunno, String> colonnaGita = new JFXTreeTableColumn<>("Gita");
+        JFXTreeTableColumn<AlunnoForTable, String> colonnaGita = new JFXTreeTableColumn<>("Gita");
         colonnaGita.setPrefWidth(150);
         colonnaGita.setCellValueFactory(param -> param.getValue().getValue().Gita);
 
-        JFXTreeTableColumn<Alunno, String> colonnaImporto = new JFXTreeTableColumn<>("Importo");
+        JFXTreeTableColumn<AlunnoForTable, String> colonnaImporto = new JFXTreeTableColumn<>("Importo");
         colonnaImporto.setPrefWidth(150);
         colonnaImporto.setCellValueFactory(param -> param.getValue().getValue().Importo);
 
-        JFXTreeTableColumn<Alunno, String> colonnaMese = new JFXTreeTableColumn<>("Mese");
+        JFXTreeTableColumn<AlunnoForTable, String> colonnaMese = new JFXTreeTableColumn<>("Mese");
         colonnaMese.setPrefWidth(150);
         colonnaMese.setCellValueFactory(param -> param.getValue().getValue().Mese);
 
-        ObservableList<Alunno> alunni = FXCollections.observableArrayList();
+        ObservableList<AlunnoForTable> alunni = FXCollections.observableArrayList();
 
         final RecursiveTreeItem root = new RecursiveTreeItem<>(alunni, RecursiveTreeObject::getChildren);
         myTable.setRoot(root);

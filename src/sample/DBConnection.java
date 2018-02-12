@@ -2,6 +2,7 @@ package sample;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import sample.Repositories.Alunno;
 import sample.Repositories.Gita;
 import sample.Repositories.NameSurname;
 
@@ -18,6 +19,15 @@ public class DBConnection {
     public void getConnection() throws ClassNotFoundException, SQLException {
         Class.forName("org.sqlite.JDBC");
         con = DriverManager.getConnection("jdbc:sqlite:DB.db");
+    }
+
+    public ObservableList<String> getCognome() throws SQLException, ClassNotFoundException {
+        ObservableList<String> list = FXCollections.observableArrayList();
+        if (con==null)  getConnection();
+        Statement statement=con.createStatement();
+        ResultSet resultSet = statement.executeQuery("SELECT * FROM Studenti");
+        while ( resultSet.next() )  list.add(resultSet.getString("cognome"));
+        return list;
     }
 
     public ObservableList<String> getClassListForComboBox() throws SQLException, ClassNotFoundException {
@@ -71,8 +81,8 @@ public class DBConnection {
         return map;
     }
 
-    public ObservableList<Alunno> getVisualizzaAlunni (String classe, String annoScolastico) throws SQLException, ClassNotFoundException {
-        ObservableList<Alunno> alunnoObservableList = FXCollections.observableArrayList();
+    public ObservableList<AlunnoForTable> getVisualizzaAlunni (String classe, String annoScolastico) throws SQLException, ClassNotFoundException {
+        ObservableList<AlunnoForTable> alunnoForTableObservableList = FXCollections.observableArrayList();
         if (con == null) getConnection();
 
         Statement statement = con.createStatement();
@@ -86,9 +96,9 @@ public class DBConnection {
         while ( finalResultSet.next() ) {
             String idAlunno= finalResultSet.getString("studenteID");
             String idGita = finalResultSet.getString("gitaID");
-            alunnoObservableList.add(new Alunno(AlunnoMap().get(idAlunno).getName(), AlunnoMap().get(idAlunno).getSurname(), classe, GitaMap().get(idGita).getLocation(), GitaMap().get(idGita).getCost(), GitaMap().get(idGita).getMonth()));
+            alunnoForTableObservableList.add(new AlunnoForTable(AlunnoMap().get(idAlunno).getName(), AlunnoMap().get(idAlunno).getSurname(), classe, GitaMap().get(idGita).getLocation(), GitaMap().get(idGita).getCost(), GitaMap().get(idGita).getMonth()));
         }
-        return alunnoObservableList;
+        return alunnoForTableObservableList;
     }
 
     public void addGitaDB(Gita gita) throws SQLException, ClassNotFoundException {
@@ -101,35 +111,56 @@ public class DBConnection {
         preparedStatement.execute();
     }
 
-    //this won't work because hasmaps are different
-    public String findIDfromMap(String value, HashMap<?,?> hashMap) {
-        for (HashMap.Entry entry: hashMap.entrySet())
-            if (value.equals(entry.getValue())){
-                return (String) entry.getKey();
-            }
-        return null;
+    public void addClasseDB(String classe) throws SQLException, ClassNotFoundException {
+        if (con==null) getConnection();
+        PreparedStatement preparedStatement = con.prepareStatement("INSERT INTO Classi values(?,?);");
+        preparedStatement.setString(2, classe);
+        preparedStatement.execute();
     }
 
-
-    public boolean checkIfPresent(String id, String tableName ) throws SQLException, ClassNotFoundException { //id of the item from TextField to check
-        ArrayList<String> idList = new ArrayList<>();
+    public void addStudenteDB (NameSurname nameSurname) throws SQLException, ClassNotFoundException {
         if (con==null)  getConnection();
-        Statement statement=con.createStatement();
-        ResultSet resultSet=statement.executeQuery("SELECT id FROM "+tableName);
-        while ( resultSet.next() )  idList.add(resultSet.getString("id"));
-        return idList.contains(id) ? true : false;
+        PreparedStatement preparedStatement=con.prepareStatement("INSERT INTO Studenti values(?,?,?);");
+        preparedStatement.setString(2, nameSurname.getName());
+        preparedStatement.setString(3, nameSurname.getSurname());
+        preparedStatement.execute();
     }
-/*
-    public void addAlunnoDB(Alunno alunno) throws SQLException, ClassNotFoundException {
+
+    public void addAnnoDB(String anno) throws SQLException, ClassNotFoundException {
+        if (con==null)   getConnection();
+        PreparedStatement preparedStatement = con.prepareStatement("INSERT INTO Anno values(?,?);");
+        preparedStatement.setString(2, anno);
+        preparedStatement.execute();
+    }
+
+    public void addFinalDB(Alunno alunno) throws SQLException, ClassNotFoundException {
         if (con==null)  getConnection();
-        HashMap.Entry entry =
-        if (checkIfPresent(, "Studenti"))
+        PreparedStatement getIDStudente = con.prepareStatement("SELECT id FROM Studenti WHERE nome='?' AND cognome='?';");
+        getIDStudente.setString(1, alunno.nomeCognome.getName());
+        getIDStudente.setString(2, alunno.nomeCognome.getSurname());
+        ResultSet resultSetStudente = getIDStudente.executeQuery();
+        String idStudente=resultSetStudente.getString("id");
 
+        PreparedStatement getIDClasse = con.prepareStatement("SELECT id FROM Classi WHERE classe='?';");
+        getIDClasse.setString(1, alunno.classe);
+        ResultSet resultSetClasse = getIDClasse.executeQuery();
+        String idClasse = resultSetClasse.getString("id");
 
-        PreparedStatement preparedStatement = con.prepareStatement("INSERT INTO Studenti values(?,?,?);");
-        preparedStatement.setString(2, alunno.getNome());
-        preparedStatement.setString(3,alunno.getCognome());
+        PreparedStatement getIDGita = con.prepareStatement("SELECT id FROM Gite WHERE location='?';");
+        getIDClasse.setString(1, alunno.gita.getLocation());
+        ResultSet resultSetGita = getIDGita.executeQuery();
+        String idGita=resultSetGita.getString("id");
 
+        PreparedStatement getIDAnno = con.prepareStatement("SELECT id FROM Anno WHERE anno='?';");
+        getIDAnno.setString(1, alunno.annoScolastico);
+        ResultSet resultSetAnno = getIDAnno.executeQuery();
+        String idAnno = resultSetAnno.getString("id");
+
+        PreparedStatement preparedStatement = con.prepareStatement("INSERT INTO Final values(?,?,?,?,?);");
+        preparedStatement.setString(2, idStudente);
+        preparedStatement.setString(3, idClasse);
+        preparedStatement.setString(4, idGita);
+        preparedStatement.setString(5,idAnno);
+        preparedStatement.execute();
     }
-    */
 }

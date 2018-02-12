@@ -2,7 +2,6 @@ package sample;
 
 import com.jfoenix.controls.*;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
-import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -13,31 +12,23 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TreeItem;
 import javafx.stage.Stage;
-
+import org.controlsfx.control.textfield.TextFields;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
-import java.util.function.Predicate;
 
 public class Controller extends DBConnection implements Initializable, javafx.beans.value.ChangeListener {
 
-    @FXML
-    private ControllerGita controllerGita;
 
 
-
-    @FXML
-    private Tab VisualizzaTab;
 
     @FXML
     private JFXTextField cercaAlunno;
 
     @FXML
-    private JFXTreeTableView<Alunno> myTable;
+    private JFXTreeTableView<AlunnoForTable> myTable;
     @FXML
     private JFXComboBox ClasseCombo;
     @FXML
@@ -46,44 +37,58 @@ public class Controller extends DBConnection implements Initializable, javafx.be
     Menu fileMenu = new Menu();
     @FXML
     MenuItem inserisciGita = new MenuItem();
+    @FXML
+    MenuItem inserisciClasse = new MenuItem();
 
-    ObservableList<String> elencoClassi= getClassListForComboBox();
-    ObservableList<String> elencoAnniScolastici = getAnniForComboBox();
+    ObservableList<String> elencoClassi;
+    ObservableList<String> elencoAnniScolastici;
+    ObservableList<String> autoCompletionList;
 
     public Controller() throws SQLException, ClassNotFoundException {
+        elencoClassi=getClassListForComboBox();
+        elencoAnniScolastici=getAnniForComboBox();
+        autoCompletionList=getCognome();
+        for (String gita:getGiteForCombo())
+            autoCompletionList.add(gita);
     }
-
 
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        JFXTreeTableColumn<Alunno, String> colonnaCognome = new JFXTreeTableColumn<>("Cognome");
+        //Cerca textfield
+        TextFields.bindAutoCompletion(cercaAlunno, autoCompletionList);
+
+        cercaAlunno.textProperty().addListener((observable, oldValue, newValue) ->
+                myTable.setPredicate(alunnoTreeItem -> alunnoTreeItem.getValue().Cognome.getValue().contains(newValue) ||
+                                                       alunnoTreeItem.getValue().Gita.getValue().contains(newValue)));
+        //Table
+        JFXTreeTableColumn<AlunnoForTable, String> colonnaCognome = new JFXTreeTableColumn<>("Cognome");
         colonnaCognome.setPrefWidth(150);
         colonnaCognome.setCellValueFactory(param -> param.getValue().getValue().Cognome);
 
-        JFXTreeTableColumn<Alunno, String> colonnaNome = new JFXTreeTableColumn<>("Nome");
+        JFXTreeTableColumn<AlunnoForTable, String> colonnaNome = new JFXTreeTableColumn<>("Nome");
         colonnaNome.setPrefWidth(150);
         colonnaNome.setCellValueFactory(param -> param.getValue().getValue().Nome);
 
 
-        JFXTreeTableColumn<Alunno, String> colonnaClasse = new JFXTreeTableColumn<>("Classe");
+        JFXTreeTableColumn<AlunnoForTable, String> colonnaClasse = new JFXTreeTableColumn<>("Classe");
         colonnaClasse.setPrefWidth(150);
         colonnaClasse.setCellValueFactory(param -> param.getValue().getValue().Classe);
 
-        JFXTreeTableColumn<Alunno, String> colonnaGita = new JFXTreeTableColumn<>("Gita");
+        JFXTreeTableColumn<AlunnoForTable, String> colonnaGita = new JFXTreeTableColumn<>("Gita");
         colonnaGita.setPrefWidth(150);
         colonnaGita.setCellValueFactory(param -> param.getValue().getValue().Gita);
 
-        JFXTreeTableColumn<Alunno, String> colonnaImporto = new JFXTreeTableColumn<>("Importo");
+        JFXTreeTableColumn<AlunnoForTable, String> colonnaImporto = new JFXTreeTableColumn<>("Importo");
         colonnaImporto.setPrefWidth(150);
         colonnaImporto.setCellValueFactory(param -> param.getValue().getValue().Importo);
 
-        JFXTreeTableColumn<Alunno, String> colonnaMese = new JFXTreeTableColumn<>("Mese");
+        JFXTreeTableColumn<AlunnoForTable, String> colonnaMese = new JFXTreeTableColumn<>("Mese");
         colonnaMese.setPrefWidth(150);
         colonnaMese.setCellValueFactory(param -> param.getValue().getValue().Mese);
 
-        ObservableList<Alunno> alunni = FXCollections.observableArrayList();
+        ObservableList<AlunnoForTable> alunni = FXCollections.observableArrayList();
 
         final RecursiveTreeItem root = new RecursiveTreeItem<>(alunni, RecursiveTreeObject::getChildren);
         myTable.setRoot(root);
@@ -97,38 +102,46 @@ public class Controller extends DBConnection implements Initializable, javafx.be
         AnnoScolasticoCombo.setItems(elencoAnniScolastici);
         AnnoScolasticoCombo.getSelectionModel().selectedItemProperty().addListener(this);
 
-        cercaAlunno.textProperty().addListener((observable, oldValue, newValue) ->
-                myTable.setPredicate(alunnoTreeItem -> alunnoTreeItem.getValue().Cognome.getValue().contains(newValue) ||
-                alunnoTreeItem.getValue().Gita.getValue().contains(newValue)));
-
     }
 
     @FXML
     public void InserisciGita() throws IOException, SQLException, ClassNotFoundException {
         Stage stage = new Stage();
+        ControllerMenuInserisci.showInsClasse=false;
+        ControllerMenuInserisci.showInsGita=true;
         FXMLLoader loader = new FXMLLoader(getClass().getResource("InserisciGita.fxml"));
         stage.setScene(new Scene(FXMLLoader.load(getClass().getResource("InserisciGita.fxml"))));
         stage.setTitle("Inserisci Gita");
         stage.setResizable(false);
         stage.show();
         Parent root = loader.load();
-        ControllerGita controllerGita = loader.getController();
+        ControllerMenuInserisci controllerMenuInserisci = loader.getController();
 
     }
 
+    public void InserisciClasse() throws IOException {
+        Stage stage = new Stage();
+        ControllerMenuInserisci.showInsGita=false;
+        ControllerMenuInserisci.showInsClasse=true;
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("InserisciClasse.fxml"));
+        stage.setScene(new Scene(FXMLLoader.load(getClass().getResource("InserisciClasse.fxml"))));
+        stage.setTitle("Inserisci Classe");
+        stage.setResizable(false);
+        stage.show();
+        Parent root = loader.load();
+        ControllerMenuInserisci controllerMenuInserisci = loader.getController();
+    }
     @Override
     public void changed(ObservableValue observable, Object oldValue, Object newValue) {
         try {
-            if (ClasseCombo.getValue()!=null && AnnoScolasticoCombo.getValue()!=null) {
-                ObservableList<Alunno> observableList = getVisualizzaAlunni(ClasseCombo.getValue().toString(), AnnoScolasticoCombo.getValue().toString());
+            if ((ClasseCombo.getValue() != null) && (AnnoScolasticoCombo.getValue() != null)) {
+                ObservableList<AlunnoForTable> observableList = getVisualizzaAlunni(ClasseCombo.getValue().toString(), AnnoScolasticoCombo.getValue().toString());
                 RecursiveTreeItem root = new RecursiveTreeItem<>(observableList, RecursiveTreeObject::getChildren);
                 myTable.setRoot(root);
                 myTable.setShowRoot(false);
             }
 
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }

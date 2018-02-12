@@ -18,7 +18,13 @@
         <menus>
           <Menu fx:id="fileMenu" mnemonicParsing="false" text="File">
             <items>
-              <MenuItem fx:id="inserisciGita" mnemonicParsing="false" onAction="#InserisciGita" text="Inserisci Gita" />
+                  <Menu mnemonicParsing="false" text="Inserisci">
+                    <items>
+                    <MenuItem fx:id="inserisciGita" mnemonicParsing="false" onAction="#InserisciGita" text="Gita" />
+                        <MenuItem fx:id="inserisciClasse" mnemonicParsing="false" onAction="#InserisciClasse" text="Classe" />
+                        <MenuItem mnemonicParsing="false" text="Anno Scolastico" />
+                    </items>
+                  </Menu>
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Edit">
