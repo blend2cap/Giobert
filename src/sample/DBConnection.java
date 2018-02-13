@@ -102,56 +102,83 @@ public class DBConnection {
     }
 
     public void addGitaDB(Gita gita) throws SQLException, ClassNotFoundException {
-        if (con==null)
-            getConnection();
-        PreparedStatement preparedStatement=con.prepareStatement("INSERT INTO Gite values(?,?,?,?);");
-        preparedStatement.setString(2, gita.getLocation());
-        preparedStatement.setString(3, gita.getCost().toString());
-        preparedStatement.setString(4,gita.getLocation());
-        preparedStatement.execute();
+        if (con==null)   getConnection();
+        // if locaiton is present do nothing, else add location
+        try {
+            PreparedStatement check = con.prepareStatement("SELECT * FROM Gite WHERE location=?;");
+            check.setString(1, gita.getLocation());
+            check.execute();
+        } catch (SQLException e) {
+            PreparedStatement preparedStatement = con.prepareStatement("INSERT INTO Gite values(?,?,?,?);");
+            preparedStatement.setString(2, gita.getLocation());
+            preparedStatement.setString(3, gita.getCost().toString());
+            preparedStatement.setString(4, gita.getLocation());
+            preparedStatement.execute();
+        }
     }
 
     public void addClasseDB(String classe) throws SQLException, ClassNotFoundException {
         if (con==null) getConnection();
-        PreparedStatement preparedStatement = con.prepareStatement("INSERT INTO Classi values(?,?);");
-        preparedStatement.setString(2, classe);
-        preparedStatement.execute();
+        try {
+            PreparedStatement check = con.prepareStatement("SELECT * FROM Classi WHERE classe=?;");
+            check.setString(1, classe);
+            check.execute();
+        } catch (SQLException e) {
+            PreparedStatement preparedStatement = con.prepareStatement("INSERT INTO Classi values(?,?);");
+            preparedStatement.setString(2, classe);
+            preparedStatement.execute();
+        }
     }
 
     public void addStudenteDB (NameSurname nameSurname) throws SQLException, ClassNotFoundException {
         if (con==null)  getConnection();
-        PreparedStatement preparedStatement=con.prepareStatement("INSERT INTO Studenti values(?,?,?);");
-        preparedStatement.setString(2, nameSurname.getName());
-        preparedStatement.setString(3, nameSurname.getSurname());
-        preparedStatement.execute();
+        try {
+            PreparedStatement check = con.prepareStatement("SELECT * FROM Studenti WHERE nome=? AND cognome=?;");
+            check.setString(1, nameSurname.getName());
+            check.setString(2, nameSurname.getSurname());
+            check.execute();
+        } catch (SQLException e){
+            PreparedStatement preparedStatement=con.prepareStatement("INSERT INTO Studenti values(?,?,?);");
+            preparedStatement.setString(2, nameSurname.getName());
+            preparedStatement.setString(3, nameSurname.getSurname());
+            preparedStatement.execute();
+        }
     }
 
     public void addAnnoDB(String anno) throws SQLException, ClassNotFoundException {
         if (con==null)   getConnection();
-        PreparedStatement preparedStatement = con.prepareStatement("INSERT INTO Anno values(?,?);");
-        preparedStatement.setString(2, anno);
-        preparedStatement.execute();
+        try {
+            PreparedStatement check = con.prepareStatement("SELECT * FROM Anno WHERE anno=?;");
+            check.setString(1, anno);
+            check.execute();
+        } catch (SQLException e) {
+            PreparedStatement preparedStatement = con.prepareStatement("INSERT INTO Anno values(?,?);");
+            preparedStatement.setString(2, anno);
+            preparedStatement.execute();
+        }
+
     }
 
     public void addFinalDB(Alunno alunno) throws SQLException, ClassNotFoundException {
         if (con==null)  getConnection();
-        PreparedStatement getIDStudente = con.prepareStatement("SELECT id FROM Studenti WHERE nome='?' AND cognome='?';");
+
+        PreparedStatement getIDStudente = con.prepareStatement("SELECT id FROM Studenti WHERE nome=? AND cognome=?;"); //this is the problem
         getIDStudente.setString(1, alunno.nomeCognome.getName());
         getIDStudente.setString(2, alunno.nomeCognome.getSurname());
         ResultSet resultSetStudente = getIDStudente.executeQuery();
         String idStudente=resultSetStudente.getString("id");
 
-        PreparedStatement getIDClasse = con.prepareStatement("SELECT id FROM Classi WHERE classe='?';");
+        PreparedStatement getIDClasse = con.prepareStatement("SELECT id FROM Classi WHERE classe=?;");
         getIDClasse.setString(1, alunno.classe);
         ResultSet resultSetClasse = getIDClasse.executeQuery();
         String idClasse = resultSetClasse.getString("id");
 
-        PreparedStatement getIDGita = con.prepareStatement("SELECT id FROM Gite WHERE location='?';");
-        getIDClasse.setString(1, alunno.gita.getLocation());
+        PreparedStatement getIDGita = con.prepareStatement("SELECT id FROM Gite WHERE location=?;");
+        getIDGita.setString(1, alunno.gita.getLocation());
         ResultSet resultSetGita = getIDGita.executeQuery();
         String idGita=resultSetGita.getString("id");
 
-        PreparedStatement getIDAnno = con.prepareStatement("SELECT id FROM Anno WHERE anno='?';");
+        PreparedStatement getIDAnno = con.prepareStatement("SELECT id FROM Anno WHERE anno=?;");
         getIDAnno.setString(1, alunno.annoScolastico);
         ResultSet resultSetAnno = getIDAnno.executeQuery();
         String idAnno = resultSetAnno.getString("id");
