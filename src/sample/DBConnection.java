@@ -2,6 +2,7 @@ package sample;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.Alert;
 import sample.Repositories.Alunno;
 import sample.Repositories.Gita;
 import sample.Repositories.NameSurname;
@@ -103,55 +104,68 @@ public class DBConnection {
 
     public void addGitaDB(Gita gita) throws SQLException, ClassNotFoundException {
         if (con==null)   getConnection();
-        // if locaiton is present do nothing, else add location
-        try {
-            PreparedStatement check = con.prepareStatement("SELECT * FROM Gite WHERE location=?;");
-            check.setString(1, gita.getLocation());
-            check.execute();
-        } catch (SQLException e) {
+        PreparedStatement check = con.prepareStatement("SELECT * FROM Gite WHERE location=?;");
+        check.setString(1, gita.getLocation());
+        ResultSet resultSet = check.executeQuery();
+        if (!resultSet.next()){
             PreparedStatement preparedStatement = con.prepareStatement("INSERT INTO Gite values(?,?,?,?);");
             preparedStatement.setString(2, gita.getLocation());
             preparedStatement.setString(3, gita.getCost().toString());
-            preparedStatement.setString(4, gita.getLocation());
+            preparedStatement.setString(4, gita.getMonth());
             preparedStatement.execute();
+        }
+        else
+        {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText("Gita già inserita");
+            alert.showAndWait();
         }
     }
 
     public void addClasseDB(String classe) throws SQLException, ClassNotFoundException {
         if (con==null) getConnection();
-        try {
-            PreparedStatement check = con.prepareStatement("SELECT * FROM Classi WHERE classe=?;");
-            check.setString(1, classe);
-            check.execute();
-        } catch (SQLException e) {
+        PreparedStatement check = con.prepareStatement("SELECT * FROM Classi WHERE classe=?;");
+        check.setString(1, classe);
+        ResultSet resultSet = check.executeQuery();
+        if (!resultSet.next()) {
             PreparedStatement preparedStatement = con.prepareStatement("INSERT INTO Classi values(?,?);");
             preparedStatement.setString(2, classe);
             preparedStatement.execute();
+        }
+        else
+         {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText("Classe già inserita");
+            alert.showAndWait();
         }
     }
 
     public void addStudenteDB (NameSurname nameSurname) throws SQLException, ClassNotFoundException {
         if (con==null)  getConnection();
-        try {
-            PreparedStatement check = con.prepareStatement("SELECT * FROM Studenti WHERE nome=? AND cognome=?;");
-            check.setString(1, nameSurname.getName());
-            check.setString(2, nameSurname.getSurname());
-            check.execute();
-        } catch (SQLException e){
+        PreparedStatement check = con.prepareStatement("SELECT id FROM Studenti WHERE nome=? AND cognome=?;");
+        check.setString(1, nameSurname.getName());
+        check.setString(2, nameSurname.getSurname());
+        ResultSet resultSet =check.executeQuery();
+        if (!resultSet.next()) {
             PreparedStatement preparedStatement=con.prepareStatement("INSERT INTO Studenti values(?,?,?);");
             preparedStatement.setString(2, nameSurname.getName());
             preparedStatement.setString(3, nameSurname.getSurname());
             preparedStatement.execute();
         }
+        else
+        {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText("Alunno già inserito");
+            alert.showAndWait();
+        }
     }
 
     public void addAnnoDB(String anno) throws SQLException, ClassNotFoundException {
         if (con==null)   getConnection();
-        try {
-            PreparedStatement check = con.prepareStatement("SELECT * FROM Anno WHERE anno=?;");
-            check.setString(1, anno);
-            check.execute();
-        } catch (SQLException e) {
+        PreparedStatement check = con.prepareStatement("SELECT * FROM Anno WHERE anno=?;");
+        check.setString(1, anno);
+        ResultSet resultSet=  check.executeQuery();
+         if (!resultSet.next()){
             PreparedStatement preparedStatement = con.prepareStatement("INSERT INTO Anno values(?,?);");
             preparedStatement.setString(2, anno);
             preparedStatement.execute();

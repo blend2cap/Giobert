@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="165.0" prefWidth="292.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.ControllerMenuInserisci">
+   <children>
+      <JFXButton buttonType="RAISED" layoutX="102.0" layoutY="100.0" onAction="#CreateClasseString" prefHeight="38.0" prefWidth="88.0" style="-fx-background-color: #dddddd;" text="Inserisci" />
+      <JFXTextField fx:id="anno" layoutX="79.0" layoutY="37.0" promptText="Anno Scolastico" />
+   </children>
+</AnchorPane>

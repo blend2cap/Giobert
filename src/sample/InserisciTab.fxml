@@ -10,10 +10,10 @@
    <children>
       <JFXTextField fx:id="inserisciNome" layoutX="25.0" layoutY="43.0" promptText="Nome" AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="43.0" />
       <JFXTextField fx:id="inserisciCognome" layoutX="25.0" layoutY="95.0" promptText="Cognome" AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="100.0" />
-      <JFXTextField fx:id="InsAS" layoutX="25.0" layoutY="281.0" promptText="Anno Scolastico" AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="270.0" />
-      <JFXComboBox fx:id="inserisciClasseCombo" layoutX="25.0" layoutY="153.0" promptText="Classe" AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="153.0" />
-      <JFXComboBox fx:id="inserisciGitaCombo" layoutX="31.0" layoutY="215.0" promptText="Gita" AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="210.0" />
+      <JFXComboBox fx:id="classeCombo" layoutX="25.0" layoutY="153.0" promptText="Classe" AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="153.0" />
+      <JFXComboBox fx:id="gitaCombo" layoutX="31.0" layoutY="215.0" promptText="Gita" AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="210.0" />
       <JFXButton fx:id="aggiungiButton" buttonType="RAISED" layoutX="51.0" layoutY="369.0" onAction="#AggiungiButton" prefHeight="40.0" prefWidth="87.0" ripplerFill="#acf5ff" style="-fx-background-color: #dddddd;" text="Aggiungi" AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="369.0" />
-      <JFXTreeTableView fx:id="myTable" layoutX="188.0" layoutY="34.0" prefHeight="462.0" prefWidth="378.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="42.0" AnchorPane.topAnchor="34.0" />
+      <JFXTreeTableView fx:id="inserisciTable" layoutX="188.0" layoutY="34.0" prefHeight="462.0" prefWidth="378.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="42.0" AnchorPane.topAnchor="34.0" />
+      <JFXComboBox fx:id="annoCombo" layoutX="32.0" layoutY="266.0" promptText="Anno" />
    </children>
 </AnchorPane>

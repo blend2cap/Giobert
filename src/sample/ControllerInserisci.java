@@ -7,6 +7,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.TreeItem;
 import sample.Repositories.Alunno;
 import sample.Repositories.Gita;
 import sample.Repositories.NameSurname;
@@ -21,10 +22,7 @@ public class ControllerInserisci extends DBConnection implements Initializable {
 
 
     @FXML
-    private JFXTreeTableView<AlunnoForTable> myTable;
-
-    @FXML
-    private JFXTextField InsAS;
+    private JFXTreeTableView<AlunnoForTable> inserisciTable;
 
     @FXML
     private JFXTextField inserisciNome;
@@ -34,20 +32,26 @@ public class ControllerInserisci extends DBConnection implements Initializable {
 
 
     @FXML
-    private JFXComboBox<String> inserisciGitaCombo;
+    private JFXComboBox<String> gitaCombo;
 
     @FXML
-    private JFXComboBox<String> inserisciClasseCombo;
+    private JFXComboBox<String> classeCombo;
+
+    @FXML
+    private JFXComboBox<String> annoCombo;
 
     @FXML
     JFXButton aggiungiButton;
 
     ObservableList<String> elencoClassi;
     ObservableList<String> elencoGite;
+    ObservableList<String> elencoAnni;
+    ObservableList<AlunnoForTable> observableListForTable;
 
     public ControllerInserisci() throws SQLException, ClassNotFoundException {
         elencoClassi=getClassListForComboBox();
         elencoGite=getGiteForCombo();
+        elencoAnni=getAnniForComboBox();
     }
 
 
@@ -56,29 +60,33 @@ public class ControllerInserisci extends DBConnection implements Initializable {
         String id = null;
         //find id
         for ( String o:map.keySet() )
-            if (Objects.equals(map.get(o).getLocation(), inserisciGitaCombo.getValue())) {
+            if (Objects.equals(map.get(o).getLocation(), gitaCombo.getValue())) {
                 id=o;
                 break;
             }
-        Alunno alunno = new Alunno(new NameSurname(inserisciNome.getText(), inserisciCognome.getText()), inserisciClasseCombo.getValue(),
-                new Gita(map.get(id).getLocation(), map.get(id).getCost(), map.get(id).getMonth()), InsAS.getText());
+        Alunno alunno = new Alunno(new NameSurname(inserisciNome.getText(), inserisciCognome.getText()), classeCombo.getValue(),
+                new Gita(map.get(id).getLocation(), map.get(id).getCost(), map.get(id).getMonth()), annoCombo.getValue());
         addStudenteDB(alunno.nomeCognome);
-        addAnnoDB(InsAS.getText());
+        addAnnoDB(annoCombo.getValue());
+        ReviewInsertTable(alunno);
         addFinalDB(alunno);
     }
 
+    public void ReviewInsertTable (Alunno alunno) {
+
+        AlunnoForTable alunnoForTable = new AlunnoForTable(alunno.nomeCognome.getName(), alunno.nomeCognome.getSurname(),
+                alunno.classe, alunno.gita.getLocation(), alunno.gita.getCost(), alunno.gita.getMonth());
+        inserisciTable.setRoot(new TreeItem<>(alunnoForTable));
+        inserisciTable.setShowRoot(false);
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         RequiredFieldValidator validator = new RequiredFieldValidator();
         validator.setMessage("Campo vuoto");
-        InsAS.getValidators().add(validator);
         inserisciNome.getValidators().add(validator);
         inserisciCognome.getValidators().add(validator);
 
-        InsAS.focusedProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue)  InsAS.validate();
-        });
         inserisciNome.focusedProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue)  inserisciNome.validate();
         });
@@ -87,10 +95,9 @@ public class ControllerInserisci extends DBConnection implements Initializable {
         });
 
         //Initialize ComboBox
-        inserisciGitaCombo.setItems(elencoGite);
-       // inserisciGitaCombo.getSelectionModel().selectedItemProperty().addListener((ChangeListener<? super String>) this);
-        inserisciClasseCombo.setItems(elencoClassi);
-        //inserisciClasseCombo.getSelectionModel().selectedItemProperty().addListener((ChangeListener<? super String>) this);
+        gitaCombo.setItems(elencoGite);
+        classeCombo.setItems(elencoClassi);
+        annoCombo.setItems(elencoAnni);
 
 
         JFXTreeTableColumn<AlunnoForTable, String> colonnaNome = new JFXTreeTableColumn<>("Nome");
@@ -120,9 +127,9 @@ public class ControllerInserisci extends DBConnection implements Initializable {
         ObservableList<AlunnoForTable> alunni = FXCollections.observableArrayList();
 
         final RecursiveTreeItem root = new RecursiveTreeItem<>(alunni, RecursiveTreeObject::getChildren);
-        myTable.setRoot(root);
-        myTable.setShowRoot(false);
-        myTable.getColumns().setAll(colonnaCognome, colonnaNome, colonnaClasse, colonnaGita, colonnaImporto, colonnaMese);
+        inserisciTable.setRoot(root);
+        inserisciTable.setShowRoot(false);
+        inserisciTable.getColumns().setAll(colonnaCognome, colonnaNome, colonnaClasse, colonnaGita, colonnaImporto, colonnaMese);
         //end table
     }
 }
