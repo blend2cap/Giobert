@@ -2,6 +2,7 @@ package sample;
 
 import com.jfoenix.controls.*;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -10,8 +11,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuItem;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 import org.controlsfx.control.textfield.TextFields;
 import java.io.IOException;
@@ -33,6 +33,8 @@ public class Controller extends DBConnection implements Initializable, javafx.be
     private JFXComboBox ClasseCombo;
     @FXML
     private JFXComboBox AnnoScolasticoCombo;
+    @FXML
+    private Label totale;
     @FXML
     Menu fileMenu = new Menu();
     @FXML
@@ -65,9 +67,15 @@ public class Controller extends DBConnection implements Initializable, javafx.be
         cercaAlunno.textProperty().addListener((observable, oldValue, newValue) ->
                 myTable.setPredicate(alunnoTreeItem -> alunnoTreeItem.getValue().Cognome.getValue().contains(newValue) ||
                                                        alunnoTreeItem.getValue().Gita.getValue().contains(newValue)));
+        cercaAlunno.textProperty().addListener((observable, oldValue, newValue) -> {
+            //calcolo totale spese
+            Double tot=0.0;
+            for (int i=0; i<myTable.getCurrentItemsCount(); i++){
+                tot+=Double.parseDouble(myTable.getTreeItem(i).getValue().getImporto());
+            }
+            totale.setText("€"+tot.toString());
+        });
 
-
-        //cercaAlunno.textProperty().addListener();
 
         //Table
         JFXTreeTableColumn<AlunnoForTable, String> colonnaCognome = new JFXTreeTableColumn<>("Cognome");
