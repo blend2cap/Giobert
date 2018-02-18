@@ -7,7 +7,11 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeTableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import sample.Repositories.Alunno;
 import sample.Repositories.Gita;
 import sample.Repositories.NameSurname;
@@ -22,7 +26,7 @@ public class ControllerInserisci extends DBConnection implements Initializable {
 
 
     @FXML
-    private JFXTreeTableView<AlunnoForTable> inserisciTable;
+    private TableView<AlunnoForTable> inserisciTable;
 
     @FXML
     private JFXTextField inserisciNome;
@@ -46,7 +50,7 @@ public class ControllerInserisci extends DBConnection implements Initializable {
     ObservableList<String> elencoClassi;
     ObservableList<String> elencoGite;
     ObservableList<String> elencoAnni;
-    ObservableList<AlunnoForTable> observableListForTable;
+    public ObservableList<AlunnoForTable> observableListForTable;
 
     public ControllerInserisci() throws SQLException, ClassNotFoundException {
         elencoClassi=getClassListForComboBox();
@@ -68,20 +72,23 @@ public class ControllerInserisci extends DBConnection implements Initializable {
                 new Gita(map.get(id).getLocation(), map.get(id).getCost(), map.get(id).getMonth()), annoCombo.getValue());
         addStudenteDB(alunno.nomeCognome);
         addAnnoDB(annoCombo.getValue());
-        ReviewInsertTable(alunno);
+        //ReviewInsertTable(alunno);
         addFinalDB(alunno);
-    }
-
-    public void ReviewInsertTable (Alunno alunno) {
-
+        //add alunno to Controller.alunni ObservableList<AlunnoFortable>
         AlunnoForTable alunnoForTable = new AlunnoForTable(alunno.nomeCognome.getName(), alunno.nomeCognome.getSurname(),
                 alunno.classe, alunno.gita.getLocation(), alunno.gita.getCost(), alunno.gita.getMonth());
-        inserisciTable.setRoot(new TreeItem<>(alunnoForTable));
-        inserisciTable.setShowRoot(false);
+        Controller.alunni.add(alunnoForTable);
+        observableListForTable.add(alunnoForTable);
+
+        inserisciTable.setItems(observableListForTable);
     }
+
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
+
         RequiredFieldValidator validator = new RequiredFieldValidator();
         validator.setMessage("Campo vuoto");
         inserisciNome.getValidators().add(validator);
@@ -99,37 +106,34 @@ public class ControllerInserisci extends DBConnection implements Initializable {
         classeCombo.setItems(elencoClassi);
         annoCombo.setItems(elencoAnni);
 
+        //start TableView
+        TableColumn<AlunnoForTable, String> nameColumn = new TableColumn<>("Nome");
+        nameColumn.setMinWidth(150);
+        nameColumn.setCellValueFactory(new PropertyValueFactory<>("Nome"));
 
-        JFXTreeTableColumn<AlunnoForTable, String> colonnaNome = new JFXTreeTableColumn<>("Nome");
-        colonnaNome.setPrefWidth(150);
-        colonnaNome.setCellValueFactory(param -> param.getValue().getValue().Nome);
+        TableColumn<AlunnoForTable, String> surnameColumn = new TableColumn<>("Cognome");
+        surnameColumn.setMinWidth(150);
+        surnameColumn.setCellValueFactory(new PropertyValueFactory<>("Cognome"));
 
-        JFXTreeTableColumn<AlunnoForTable, String> colonnaCognome = new JFXTreeTableColumn<>("Cognome");
-        colonnaCognome.setPrefWidth(150);
-        colonnaCognome.setCellValueFactory(param -> param.getValue().getValue().Cognome);
+        TableColumn<AlunnoForTable, String> classColumn = new TableColumn<>("Classe");
+        classColumn.setMinWidth(150);
+        classColumn.setCellValueFactory(new PropertyValueFactory<>("Classe"));
 
-        JFXTreeTableColumn<AlunnoForTable, String> colonnaClasse = new JFXTreeTableColumn<>("Classe");
-        colonnaClasse.setPrefWidth(150);
-        colonnaClasse.setCellValueFactory(param -> param.getValue().getValue().Classe);
+        TableColumn<AlunnoForTable, String> tripColumn = new TableColumn<>("Uscita");
+        tripColumn.setMinWidth(150);
+        tripColumn.setCellValueFactory(new PropertyValueFactory<>("Gita"));
 
-        JFXTreeTableColumn<AlunnoForTable, String> colonnaGita = new JFXTreeTableColumn<>("Gita");
-        colonnaGita.setPrefWidth(150);
-        colonnaGita.setCellValueFactory(param -> param.getValue().getValue().Gita);
+        TableColumn<AlunnoForTable, String> importColumn = new TableColumn<>("Importo");
+        importColumn.setMinWidth(150);
+        importColumn.setCellValueFactory(new PropertyValueFactory<>("Importo"));
 
-        JFXTreeTableColumn<AlunnoForTable, String> colonnaImporto = new JFXTreeTableColumn<>("Importo");
-        colonnaImporto.setPrefWidth(150);
-        colonnaImporto.setCellValueFactory(param -> param.getValue().getValue().Importo);
+        TableColumn<AlunnoForTable, String> monthColumn = new TableColumn<>("Mese");
+        monthColumn.setMinWidth(150);
+        monthColumn.setCellValueFactory(new PropertyValueFactory<>("Mese"));
 
-        JFXTreeTableColumn<AlunnoForTable, String> colonnaMese = new JFXTreeTableColumn<>("Mese");
-        colonnaMese.setPrefWidth(150);
-        colonnaMese.setCellValueFactory(param -> param.getValue().getValue().Mese);
-
-        ObservableList<AlunnoForTable> alunni = FXCollections.observableArrayList();
-
-        final RecursiveTreeItem root = new RecursiveTreeItem<>(alunni, RecursiveTreeObject::getChildren);
-        inserisciTable.setRoot(root);
-        inserisciTable.setShowRoot(false);
-        inserisciTable.getColumns().setAll(colonnaCognome, colonnaNome, colonnaClasse, colonnaGita, colonnaImporto, colonnaMese);
+        inserisciTable = new TableView<>();
+        inserisciTable.setItems(observableListForTable);
+        inserisciTable.getColumns().addAll(nameColumn, surnameColumn, classColumn, tripColumn, importColumn, monthColumn);
         //end table
     }
 }

@@ -26,7 +26,7 @@ public class DBConnection {
         ObservableList<String> list = FXCollections.observableArrayList();
         if (con==null)  getConnection();
         Statement statement=con.createStatement();
-        ResultSet resultSet = statement.executeQuery("SELECT * FROM Studenti");
+        ResultSet resultSet = statement.executeQuery("SELECT * FROM Studenti ORDER BY cognome");
         while ( resultSet.next() )  list.add(resultSet.getString("cognome"));
         return list;
     }
@@ -35,7 +35,7 @@ public class DBConnection {
         ObservableList<String> classi = FXCollections.observableArrayList();
         if (con == null) getConnection();
         Statement statement = con.createStatement();
-        ResultSet resultSet = statement.executeQuery("SELECT * FROM Classi");
+        ResultSet resultSet = statement.executeQuery("SELECT * FROM Classi ORDER BY classe");
         while ( resultSet.next() ) classi.add(resultSet.getString("classe"));
         return classi;
     }
@@ -45,7 +45,7 @@ public class DBConnection {
         ObservableList<String> anniList = FXCollections.observableArrayList();
         if (con == null) getConnection();
         Statement statement = con.createStatement();
-        ResultSet resultSet = statement.executeQuery("SELECT * FROM Anno");
+        ResultSet resultSet = statement.executeQuery("SELECT * FROM Anno ORDER BY anno");
         while ( resultSet.next() )
             anniList.add(resultSet.getString("anno"));
         return anniList;
@@ -55,7 +55,7 @@ public class DBConnection {
         ObservableList<String> observableList = FXCollections.observableArrayList();
         if (con==null) getConnection();
         Statement statement = con.createStatement();
-        ResultSet resultSet = statement.executeQuery("SELECT * FROM Gite");
+        ResultSet resultSet = statement.executeQuery("SELECT * FROM Gite ORDER BY location");
         while ( resultSet.next() )
             observableList.add(resultSet.getString("location"));
 
@@ -99,8 +99,9 @@ public class DBConnection {
             String idGita = finalResultSet.getString("gitaID");
             alunnoForTableObservableList.add(new AlunnoForTable(AlunnoMap().get(idAlunno).getName(), AlunnoMap().get(idAlunno).getSurname(), classe, GitaMap().get(idGita).getLocation(), GitaMap().get(idGita).getCost(), GitaMap().get(idGita).getMonth()));
         }
+        alunnoForTableObservableList.sort(Comparator.comparing(AlunnoForTable::getCognome));
         return alunnoForTableObservableList;
-    }
+}
 
     public void addGitaDB(Gita gita) throws SQLException, ClassNotFoundException {
         if (con==null)   getConnection();
@@ -176,7 +177,7 @@ public class DBConnection {
     public void addFinalDB(Alunno alunno) throws SQLException, ClassNotFoundException {
         if (con==null)  getConnection();
 
-        PreparedStatement getIDStudente = con.prepareStatement("SELECT id FROM Studenti WHERE nome=? AND cognome=?;"); //this is the problem
+        PreparedStatement getIDStudente = con.prepareStatement("SELECT id FROM Studenti WHERE nome=? AND cognome=?;");
         getIDStudente.setString(1, alunno.nomeCognome.getName());
         getIDStudente.setString(2, alunno.nomeCognome.getSurname());
         ResultSet resultSetStudente = getIDStudente.executeQuery();

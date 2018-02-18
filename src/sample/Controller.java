@@ -39,10 +39,13 @@ public class Controller extends DBConnection implements Initializable, javafx.be
     MenuItem inserisciGita = new MenuItem();
     @FXML
     MenuItem inserisciClasse = new MenuItem();
+    @FXML
+    MenuItem inserisciAnno = new Menu();
 
     ObservableList<String> elencoClassi;
     ObservableList<String> elencoAnniScolastici;
     ObservableList<String> autoCompletionList;
+    static ObservableList<AlunnoForTable> alunni = FXCollections.observableArrayList();
 
     public Controller() throws SQLException, ClassNotFoundException {
         elencoClassi=getClassListForComboBox();
@@ -62,6 +65,10 @@ public class Controller extends DBConnection implements Initializable, javafx.be
         cercaAlunno.textProperty().addListener((observable, oldValue, newValue) ->
                 myTable.setPredicate(alunnoTreeItem -> alunnoTreeItem.getValue().Cognome.getValue().contains(newValue) ||
                                                        alunnoTreeItem.getValue().Gita.getValue().contains(newValue)));
+
+
+        //cercaAlunno.textProperty().addListener();
+
         //Table
         JFXTreeTableColumn<AlunnoForTable, String> colonnaCognome = new JFXTreeTableColumn<>("Cognome");
         colonnaCognome.setPrefWidth(150);
@@ -88,7 +95,7 @@ public class Controller extends DBConnection implements Initializable, javafx.be
         colonnaMese.setPrefWidth(150);
         colonnaMese.setCellValueFactory(param -> param.getValue().getValue().Mese);
 
-        ObservableList<AlunnoForTable> alunni = FXCollections.observableArrayList();
+
 
         final RecursiveTreeItem root = new RecursiveTreeItem<>(alunni, RecursiveTreeObject::getChildren);
         myTable.setRoot(root);
@@ -122,6 +129,7 @@ public class Controller extends DBConnection implements Initializable, javafx.be
     public void InserisciClasse() throws IOException {
         Stage stage = new Stage();
         ControllerMenuInserisci.showInsGita=false;
+        ControllerMenuInserisci.showInsAnno=false;
         ControllerMenuInserisci.showInsClasse=true;
         FXMLLoader loader = new FXMLLoader(getClass().getResource("InserisciClasse.fxml"));
         stage.setScene(new Scene(FXMLLoader.load(getClass().getResource("InserisciClasse.fxml"))));
@@ -131,6 +139,20 @@ public class Controller extends DBConnection implements Initializable, javafx.be
         Parent root = loader.load();
         ControllerMenuInserisci controllerMenuInserisci = loader.getController();
     }
+
+    public void InserisciAnno() throws IOException {
+        Stage stage = new Stage();
+        ControllerMenuInserisci.showInsClasse=false;
+        ControllerMenuInserisci.showInsGita=false;
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("InserisciAnno.fxml"));
+        stage.setScene(new Scene(FXMLLoader.load(getClass().getResource("InserisciAnno.fxml"))));
+        stage.setTitle("Inserisci Anno");
+        stage.setResizable(false);
+        stage.show();
+        Parent root = loader.load();
+        ControllerMenuInserisci controllerMenuInserisci = loader.getController();
+    }
+
     @Override
     public void changed(ObservableValue observable, Object oldValue, Object newValue) {
         try {
@@ -144,6 +166,7 @@ public class Controller extends DBConnection implements Initializable, javafx.be
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
+
     }
 
 }

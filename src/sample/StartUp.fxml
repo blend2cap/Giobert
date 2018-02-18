@@ -22,7 +22,7 @@
                     <items>
                     <MenuItem fx:id="inserisciGita" mnemonicParsing="false" onAction="#InserisciGita" text="Gita" />
                         <MenuItem fx:id="inserisciClasse" mnemonicParsing="false" onAction="#InserisciClasse" text="Classe" />
-                        <MenuItem mnemonicParsing="false" text="Anno Scolastico" />
+                        <MenuItem fx:id="inserisciAnno" mnemonicParsing="false" onAction="#InserisciAnno" text="Anno Scolastico" />
                     </items>
                   </Menu>
             </items>

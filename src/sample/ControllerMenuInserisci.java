@@ -24,12 +24,18 @@ public class ControllerMenuInserisci extends DBConnection implements Initializab
     @FXML
     private JFXTextField mese;
 
+
     //InserisciClasse.fxml
     @FXML
     private JFXTextField classe;
 
+    //InserisciAnno.fxml
+    @FXML
+    private JFXTextField anno;
+
     public static boolean showInsGita=false;
     public static boolean showInsClasse=false;
+    public static boolean showInsAnno=false;
 
     public ControllerMenuInserisci() throws SQLException {
 
@@ -65,6 +71,7 @@ public class ControllerMenuInserisci extends DBConnection implements Initializab
 
     public void CreateClasseString() throws SQLException, ClassNotFoundException {
         ObservableList<String> list = getClassListForComboBox();
+
         if (checkStringField(classe) && !list.contains(classe.getText()))
             addClasseDB(classe.getText());
         else {
@@ -74,6 +81,16 @@ public class ControllerMenuInserisci extends DBConnection implements Initializab
         }
     }
 
+    public void CreateAnnoString() throws SQLException, ClassNotFoundException {
+        ObservableList<String> list = getAnniForComboBox();
+        if (checkStringField(anno) && !list.contains(anno.getText()))
+            addAnnoDB(anno.getText());
+        else {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText("Anno Scolastico non inserito!");
+            alert.showAndWait();
+        }
+    }
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         if (showInsGita) {
@@ -107,6 +124,16 @@ public class ControllerMenuInserisci extends DBConnection implements Initializab
             classe.getValidators().add(emptyValidator);
             classe.focusedProperty().addListener((observable, oldValue, newValue) -> {
                 if (!newValue) classe.validate();
+            });
+        }
+
+        //InserisciAnno.fxml
+        if (showInsAnno) {
+            RequiredFieldValidator emptyValidator = new RequiredFieldValidator();
+            emptyValidator.setMessage("Campo vuoto!");
+            anno.getValidators().add(emptyValidator);
+            anno.focusedProperty().addListener((observable, oldValue, newValue) -> {
+                if (!newValue) anno.validate();
             });
         }
     }
