@@ -19,14 +19,13 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
-public class Controller extends DBConnection implements Initializable, javafx.beans.value.ChangeListener {
-
-
+public class Controller extends DBConnection implements Initializable, ChangeListener {
 
 
     @FXML
+    private JFXButton deleteButton;
+    @FXML
     private JFXTextField cercaAlunno;
-
     @FXML
     private JFXTreeTableView<AlunnoForTable> myTable;
     @FXML
@@ -119,8 +118,13 @@ public class Controller extends DBConnection implements Initializable, javafx.be
 
     }
 
+    public void eliminaButton() throws SQLException, ClassNotFoundException {
+        TreeItem<AlunnoForTable> selectedItem = myTable.getSelectionModel().getSelectedItem();
+        deleteAlunno(selectedItem.getValue());
+    }
+
     @FXML
-    public void InserisciGita() throws IOException, SQLException, ClassNotFoundException {
+    public void InserisciGita() throws IOException {
         Stage stage = new Stage();
         ControllerMenuInserisci.showInsClasse=false;
         ControllerMenuInserisci.showInsGita=true;

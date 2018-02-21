@@ -205,4 +205,22 @@ public class DBConnection {
         preparedStatement.setString(5,idAnno);
         preparedStatement.execute();
     }
+
+    public void deleteAlunno(AlunnoForTable alunno) throws SQLException, ClassNotFoundException {
+        if (con==null)  getConnection();
+        PreparedStatement getIDStudente = con.prepareStatement("SELECT id FROM Studenti WHERE nome=? AND cognome=?;");
+        getIDStudente.setString(1, alunno.getNome());
+        getIDStudente.setString(2, alunno.getCognome());
+        ResultSet resultSetStudente = getIDStudente.executeQuery();
+        String idStudente=resultSetStudente.getString("id");
+
+
+        PreparedStatement delNameSurname = con.prepareStatement("DELETE FROM Studenti WHERE id=?;");
+        delNameSurname.setString(1, idStudente);
+        delNameSurname.execute();
+
+        PreparedStatement delFinal=con.prepareStatement("DELETE FROM Final WHERE studenteID=?;");
+        delFinal.setString(1, idStudente);
+        delFinal.execute();
+    }
 }
