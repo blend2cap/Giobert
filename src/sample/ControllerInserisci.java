@@ -26,9 +26,6 @@ public class ControllerInserisci extends DBConnection implements Initializable {
 
 
     @FXML
-    private TableView<AlunnoForTable> inserisciTable;
-
-    @FXML
     private JFXTextField inserisciNome;
 
     @FXML
@@ -50,7 +47,6 @@ public class ControllerInserisci extends DBConnection implements Initializable {
     ObservableList<String> elencoClassi;
     ObservableList<String> elencoGite;
     ObservableList<String> elencoAnni;
-    public ObservableList<AlunnoForTable> observableListForTable;
 
     public ControllerInserisci() throws SQLException, ClassNotFoundException {
         elencoClassi=getClassListForComboBox();
@@ -78,9 +74,6 @@ public class ControllerInserisci extends DBConnection implements Initializable {
         AlunnoForTable alunnoForTable = new AlunnoForTable(alunno.nomeCognome.getName(), alunno.nomeCognome.getSurname(),
                 alunno.classe, alunno.gita.getLocation(), alunno.gita.getCost(), alunno.gita.getMonth());
         Controller.alunni.add(alunnoForTable);
-        observableListForTable.add(alunnoForTable);
-
-        inserisciTable.setItems(observableListForTable);
     }
 
 
@@ -105,35 +98,5 @@ public class ControllerInserisci extends DBConnection implements Initializable {
         gitaCombo.setItems(elencoGite);
         classeCombo.setItems(elencoClassi);
         annoCombo.setItems(elencoAnni);
-
-        //start TableView
-        TableColumn<AlunnoForTable, String> nameColumn = new TableColumn<>("Nome");
-        nameColumn.setMinWidth(150);
-        nameColumn.setCellValueFactory(new PropertyValueFactory<>("Nome"));
-
-        TableColumn<AlunnoForTable, String> surnameColumn = new TableColumn<>("Cognome");
-        surnameColumn.setMinWidth(150);
-        surnameColumn.setCellValueFactory(new PropertyValueFactory<>("Cognome"));
-
-        TableColumn<AlunnoForTable, String> classColumn = new TableColumn<>("Classe");
-        classColumn.setMinWidth(150);
-        classColumn.setCellValueFactory(new PropertyValueFactory<>("Classe"));
-
-        TableColumn<AlunnoForTable, String> tripColumn = new TableColumn<>("Uscita");
-        tripColumn.setMinWidth(150);
-        tripColumn.setCellValueFactory(new PropertyValueFactory<>("Gita"));
-
-        TableColumn<AlunnoForTable, String> importColumn = new TableColumn<>("Importo");
-        importColumn.setMinWidth(150);
-        importColumn.setCellValueFactory(new PropertyValueFactory<>("Importo"));
-
-        TableColumn<AlunnoForTable, String> monthColumn = new TableColumn<>("Mese");
-        monthColumn.setMinWidth(150);
-        monthColumn.setCellValueFactory(new PropertyValueFactory<>("Mese"));
-
-        inserisciTable = new TableView<>();
-        inserisciTable.setItems(observableListForTable);
-        inserisciTable.getColumns().addAll(nameColumn, surnameColumn, classColumn, tripColumn, importColumn, monthColumn);
-        //end table
     }
 }

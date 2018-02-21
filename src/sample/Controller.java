@@ -42,6 +42,8 @@ public class Controller extends DBConnection implements Initializable, ChangeLis
     MenuItem inserisciClasse = new MenuItem();
     @FXML
     MenuItem inserisciAnno = new Menu();
+    @FXML
+    MenuItem inserisciAlunno = new MenuItem();
 
     ObservableList<String> elencoClassi;
     ObservableList<String> elencoAnniScolastici;
@@ -165,6 +167,16 @@ public class Controller extends DBConnection implements Initializable, ChangeLis
         ControllerMenuInserisci controllerMenuInserisci = loader.getController();
     }
 
+    public void InserisciAlunno() throws IOException {
+        Stage stage = new Stage();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("InserisciTab.fxml"));
+        stage.setScene(new Scene(FXMLLoader.load(getClass().getResource("InserisciTab.fxml"))));
+        stage.setTitle("Inserisci Alunno");
+        stage.setResizable(false);
+        stage.show();
+        Parent root = loader.load();
+        ControllerInserisci controllerMenuInserisci = loader.getController();
+    }
     @Override
     public void changed(ObservableValue observable, Object oldValue, Object newValue) {
         try {
