@@ -51,6 +51,8 @@ public class ControllerMenuInserisci extends DBConnection implements Initializab
     }
 
     public boolean checkStringField(JFXTextField field){
+        if (field.getText().isEmpty())
+            return false;
         try {
             Double number = Double.parseDouble(field.getText());
             return false;

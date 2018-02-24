@@ -7,10 +7,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeTableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import sample.Repositories.Alunno;
 import sample.Repositories.Gita;
@@ -56,24 +53,30 @@ public class ControllerInserisci extends DBConnection implements Initializable {
 
 
     public void AggiungiButton() throws SQLException, ClassNotFoundException {
-        HashMap<String, Gita> map=GitaMap();
-        String id = null;
-        //find id
-        for ( String o:map.keySet() )
-            if (Objects.equals(map.get(o).getLocation(), gitaCombo.getValue())) {
-                id=o;
-                break;
-            }
-        Alunno alunno = new Alunno(new NameSurname(inserisciNome.getText(), inserisciCognome.getText()), classeCombo.getValue(),
-                new Gita(map.get(id).getLocation(), map.get(id).getCost(), map.get(id).getMonth()), annoCombo.getValue());
-        addStudenteDB(alunno.nomeCognome);
-        addAnnoDB(annoCombo.getValue());
-        //ReviewInsertTable(alunno);
-        addFinalDB(alunno);
-        //add alunno to Controller.alunni ObservableList<AlunnoFortable>
-        AlunnoForTable alunnoForTable = new AlunnoForTable(alunno.nomeCognome.getName(), alunno.nomeCognome.getSurname(),
-                alunno.classe, alunno.gita.getLocation(), alunno.gita.getCost(), alunno.gita.getMonth());
-        Controller.alunni.add(alunnoForTable);
+        try {
+            HashMap<String, Gita> map = GitaMap();
+            String id = null;
+            //find id
+            for (String o : map.keySet())
+                if (Objects.equals(map.get(o).getLocation(), gitaCombo.getValue())) {
+                    id = o;
+                    break;
+                }
+            Alunno alunno = new Alunno(new NameSurname(inserisciNome.getText(), inserisciCognome.getText()), classeCombo.getValue(),
+                    new Gita(map.get(id).getLocation(), map.get(id).getCost(), map.get(id).getMonth()), annoCombo.getValue());
+            addStudenteDB(alunno.nomeCognome);
+            addAnnoDB(annoCombo.getValue());
+            //ReviewInsertTable(alunno);
+            addFinalDB(alunno);
+            //add alunno to Controller.alunni ObservableList<AlunnoFortable>
+            AlunnoForTable alunnoForTable = new AlunnoForTable(alunno.nomeCognome.getName(), alunno.nomeCognome.getSurname(),
+                    alunno.classe, alunno.gita.getLocation(), alunno.gita.getCost(), alunno.gita.getMonth());
+            Controller.alunni.add(alunnoForTable);
+        } catch (Exception e){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText("Alunno non inserito!");
+            alert.showAndWait();
+        }
     }
 
 

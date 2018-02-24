@@ -16,28 +16,14 @@
    <children>
       <MenuBar prefHeight="0.0" prefWidth="600.0" StackPane.alignment="TOP_LEFT">
         <menus>
-          <Menu fx:id="fileMenu" mnemonicParsing="false" text="File">
-            <items>
-                  <Menu mnemonicParsing="false" text="Inserisci">
-                    <items>
-                    <MenuItem fx:id="inserisciGita" mnemonicParsing="false" onAction="#InserisciGita" text="Gita" />
-                        <MenuItem fx:id="inserisciClasse" mnemonicParsing="false" onAction="#InserisciClasse" text="Classe" />
-                        <MenuItem fx:id="inserisciAnno" mnemonicParsing="false" onAction="#InserisciAnno" text="Anno Scolastico" />
-                        <MenuItem fx:id="inserisciAlunno" mnemonicParsing="false" onAction="#InserisciAlunno" text="Alunno" />
-                    </items>
-                  </Menu>
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Edit">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Delete" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Help">
-            <items>
-              <MenuItem mnemonicParsing="false" text="About" />
-            </items>
-          </Menu>
+            <Menu mnemonicParsing="false" text="Inserisci">
+              <items>
+              <MenuItem fx:id="inserisciGita" mnemonicParsing="false" onAction="#InserisciGita" text="Gita" />
+                  <MenuItem fx:id="inserisciClasse" mnemonicParsing="false" onAction="#InserisciClasse" text="Classe" />
+                  <MenuItem fx:id="inserisciAnno" mnemonicParsing="false" onAction="#InserisciAnno" text="Anno Scolastico" />
+                  <MenuItem fx:id="inserisciAlunno" mnemonicParsing="false" onAction="#InserisciAlunno" text="Alunno" />
+              </items>
+            </Menu>
         </menus>
       </MenuBar>
     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="468.0" prefWidth="1075.0">
