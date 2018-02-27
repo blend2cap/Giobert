@@ -3,6 +3,7 @@ package sample;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
+import javafx.scene.control.TreeItem;
 import sample.Repositories.Alunno;
 import sample.Repositories.Gita;
 import sample.Repositories.NameSurname;
@@ -28,6 +29,15 @@ public class DBConnection {
         Statement statement=con.createStatement();
         ResultSet resultSet = statement.executeQuery("SELECT * FROM Studenti ORDER BY cognome");
         while ( resultSet.next() )  list.add(resultSet.getString("cognome"));
+        return list;
+    }
+    public ObservableList<NameSurname> getNomeCognome() throws SQLException, ClassNotFoundException {
+        ObservableList<NameSurname> list = FXCollections.observableArrayList();
+        if (con==null)  getConnection();
+        Statement statement=con.createStatement();
+        ResultSet resultSet = statement.executeQuery("SELECT * FROM Studenti ORDER BY cognome");
+        while ( resultSet.next() )
+            list.add(new NameSurname(resultSet.getString("nome"), resultSet.getString("cognome")));
         return list;
     }
 
@@ -85,7 +95,6 @@ public class DBConnection {
     public ObservableList<AlunnoForTable> getVisualizzaAlunni (String classe, String annoScolastico) throws SQLException, ClassNotFoundException {
         ObservableList<AlunnoForTable> alunnoForTableObservableList = FXCollections.observableArrayList();
         if (con == null) getConnection();
-
         Statement statement = con.createStatement();
         ResultSet classResultSet = statement.executeQuery("SELECT * FROM Classi WHERE classe='"+classe+"'");
         String classeId=classResultSet.getString("id"); //stores the id of the selected class
@@ -97,7 +106,7 @@ public class DBConnection {
         while ( finalResultSet.next() ) {
             String idAlunno= finalResultSet.getString("studenteID");
             String idGita = finalResultSet.getString("gitaID");
-            alunnoForTableObservableList.add(new AlunnoForTable(AlunnoMap().get(idAlunno).getName(), AlunnoMap().get(idAlunno).getSurname(), classe, GitaMap().get(idGita).getLocation(), GitaMap().get(idGita).getCost(), GitaMap().get(idGita).getMonth()));
+            alunnoForTableObservableList.add(new AlunnoForTable(AlunnoMap().get(idAlunno).getName().getValue(), AlunnoMap().get(idAlunno).getSurname().getValue(), classe, GitaMap().get(idGita).getLocation(), GitaMap().get(idGita).getCost(), GitaMap().get(idGita).getMonth()));
         }
         alunnoForTableObservableList.sort(Comparator.comparing(AlunnoForTable::getCognome));
         return alunnoForTableObservableList;
@@ -144,13 +153,13 @@ public class DBConnection {
     public void addStudenteDB (NameSurname nameSurname) throws SQLException, ClassNotFoundException {
         if (con==null)  getConnection();
         PreparedStatement check = con.prepareStatement("SELECT id FROM Studenti WHERE nome=? AND cognome=?;");
-        check.setString(1, nameSurname.getName());
-        check.setString(2, nameSurname.getSurname());
+        check.setString(1, nameSurname.getName().toString());
+        check.setString(2, nameSurname.getSurname().toString());
         ResultSet resultSet =check.executeQuery();
         if (!resultSet.next()) {
             PreparedStatement preparedStatement=con.prepareStatement("INSERT INTO Studenti values(?,?,?);");
-            preparedStatement.setString(2, nameSurname.getName());
-            preparedStatement.setString(3, nameSurname.getSurname());
+            preparedStatement.setString(2, nameSurname.getName().toString());
+            preparedStatement.setString(3, nameSurname.getSurname().toString());
             preparedStatement.execute();
         }
         else
@@ -178,8 +187,8 @@ public class DBConnection {
         if (con==null)  getConnection();
 
         PreparedStatement getIDStudente = con.prepareStatement("SELECT id FROM Studenti WHERE nome=? AND cognome=?;");
-        getIDStudente.setString(1, alunno.nomeCognome.getName());
-        getIDStudente.setString(2, alunno.nomeCognome.getSurname());
+        getIDStudente.setString(1, alunno.nomeCognome.getName().toString());
+        getIDStudente.setString(2, alunno.nomeCognome.getSurname().toString());
         ResultSet resultSetStudente = getIDStudente.executeQuery();
         String idStudente=resultSetStudente.getString("id");
 
@@ -206,7 +215,7 @@ public class DBConnection {
         preparedStatement.execute();
     }
 
-    public void deleteAlunno(AlunnoForTable alunno) throws SQLException, ClassNotFoundException {
+    public void deleteAlunnoFinal(AlunnoForTable alunno) throws SQLException, ClassNotFoundException {
         if (con==null)  getConnection();
         PreparedStatement getIDStudente = con.prepareStatement("SELECT id FROM Studenti WHERE nome=? AND cognome=?;");
         getIDStudente.setString(1, alunno.getNome());
@@ -214,13 +223,34 @@ public class DBConnection {
         ResultSet resultSetStudente = getIDStudente.executeQuery();
         String idStudente=resultSetStudente.getString("id");
 
-
-        PreparedStatement delNameSurname = con.prepareStatement("DELETE FROM Studenti WHERE id=?;");
-        delNameSurname.setString(1, idStudente);
-        delNameSurname.execute();
-
         PreparedStatement delFinal=con.prepareStatement("DELETE FROM Final WHERE studenteID=?;");
         delFinal.setString(1, idStudente);
         delFinal.execute();
+    }
+
+    public void deleteClasse(String classe) throws SQLException, ClassNotFoundException {
+        if (con==null)  getConnection();
+        PreparedStatement delete=con.prepareStatement("DELETE FROM Classi WHERE classe=?;");
+        delete.setString(1, classe);
+        delete.execute();
+    }
+    public void deleteAnno(String anno) throws SQLException, ClassNotFoundException {
+        if (con==null) getConnection();
+        PreparedStatement delete=con.prepareStatement("DELETE FROM Anno WHERE anno=?;");
+        delete.setString(1, anno);
+        delete.execute();
+    }
+    public  void deleteAlunni(TreeItem<NameSurname> nameSurname) throws SQLException, ClassNotFoundException {
+        if (con==null) getConnection();
+        PreparedStatement del = con.prepareStatement("DELETE FROM Studenti WHERE nome=? AND cognome=?;");
+        del.setString(1, nameSurname.getValue().getName().toString());
+        del.setString(2, nameSurname.getValue().getSurname().toString());
+        del.execute();
+    }
+    public void deleteGita(String gita) throws SQLException, ClassNotFoundException {
+        if (con==null) getConnection();
+        PreparedStatement del=con.prepareStatement("DELETE FROM Gite WHERE location=?;");
+        del.setString(1, gita);
+        del.execute();
     }
 }

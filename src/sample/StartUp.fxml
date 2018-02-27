@@ -16,12 +16,17 @@
    <children>
       <MenuBar prefHeight="0.0" prefWidth="600.0" StackPane.alignment="TOP_LEFT">
         <menus>
-            <Menu mnemonicParsing="false" text="Inserisci">
+            <Menu mnemonicParsing="false" text="File">
               <items>
-              <MenuItem fx:id="inserisciGita" mnemonicParsing="false" onAction="#InserisciGita" text="Gita" />
-                  <MenuItem fx:id="inserisciClasse" mnemonicParsing="false" onAction="#InserisciClasse" text="Classe" />
-                  <MenuItem fx:id="inserisciAnno" mnemonicParsing="false" onAction="#InserisciAnno" text="Anno Scolastico" />
-                  <MenuItem fx:id="inserisciAlunno" mnemonicParsing="false" onAction="#InserisciAlunno" text="Alunno" />
+                  <Menu mnemonicParsing="false" text="Inserisci">
+                    <items>
+                    <MenuItem fx:id="inserisciGita" mnemonicParsing="false" onAction="#InserisciGita" text="Gita" />
+                        <MenuItem fx:id="inserisciClasse" mnemonicParsing="false" onAction="#InserisciClasse" text="Classe" />
+                        <MenuItem fx:id="inserisciAnno" mnemonicParsing="false" onAction="#InserisciAnno" text="Anno Scolastico" />
+                        <MenuItem fx:id="inserisciAlunno" mnemonicParsing="false" onAction="#InserisciAlunno" text="Alunno" />
+                    </items>
+                  </Menu>
+                <MenuItem fx:id="eliminaDati" mnemonicParsing="false" onAction="#EliminaDati" text="Elimina Dati" />
               </items>
             </Menu>
         </menus>

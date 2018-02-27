@@ -69,7 +69,7 @@ public class ControllerInserisci extends DBConnection implements Initializable {
             //ReviewInsertTable(alunno);
             addFinalDB(alunno);
             //add alunno to Controller.alunni ObservableList<AlunnoFortable>
-            AlunnoForTable alunnoForTable = new AlunnoForTable(alunno.nomeCognome.getName(), alunno.nomeCognome.getSurname(),
+            AlunnoForTable alunnoForTable = new AlunnoForTable(alunno.nomeCognome.getName().toString(), alunno.nomeCognome.getSurname().toString(),
                     alunno.classe, alunno.gita.getLocation(), alunno.gita.getCost(), alunno.gita.getMonth());
             Controller.alunni.add(alunnoForTable);
         } catch (Exception e){

@@ -1,28 +1,34 @@
 package sample.Repositories;
 
-public class NameSurname {
-    private String name;
-    private String surname;
+import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+
+public class NameSurname extends RecursiveTreeObject<NameSurname> {
+    public StringProperty name;
+    public StringProperty surname;
 
     public NameSurname(String name, String surname){
-        this.name=name;
-        this.surname=surname;
+        this.name=new SimpleStringProperty(name);
+        this.surname=new SimpleStringProperty(surname);
     }
 
-
-    public String getName() {
+    public StringProperty getName() {
         return name;
     }
 
-    public String getSurname() {
+    public StringProperty getSurname() {
         return surname;
     }
 
-    public void setName(String name) {
+    public String getSurnameValue(){
+        return String.valueOf(surname);
+    }
+    public void setName(StringProperty name) {
         this.name = name;
     }
 
-    public void setSurname(String surname) {
+    public void setSurname(StringProperty surname) {
         this.surname = surname;
     }
 }

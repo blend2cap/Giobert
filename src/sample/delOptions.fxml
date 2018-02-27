@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXCheckBox?>
+<?import com.jfoenix.controls.JFXListView?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import com.jfoenix.controls.JFXTreeTableView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="450.0" prefWidth="820.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.ControllerElimina">
+   <children>
+      <JFXListView fx:id="classiList" layoutX="23.0" layoutY="67.0" prefHeight="253.0" prefWidth="115.0" AnchorPane.bottomAnchor="117.0" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="67.0" />
+      <JFXListView fx:id="anniList" layoutX="169.0" layoutY="67.0" prefHeight="253.0" prefWidth="115.0" AnchorPane.bottomAnchor="117.0" AnchorPane.topAnchor="67.0" />
+      <JFXTextField fx:id="cercaTextField" layoutX="512.0" layoutY="26.0" prefHeight="25.0" prefWidth="64.0" promptText="Cerca" AnchorPane.topAnchor="26.0" />
+      <JFXListView fx:id="giteList" layoutX="609.0" layoutY="66.0" prefHeight="253.0" prefWidth="171.0" AnchorPane.bottomAnchor="118.0" AnchorPane.rightAnchor="32.0" AnchorPane.topAnchor="66.0" />
+      <JFXButton fx:id="deleteButton" buttonType="RAISED" layoutX="371.0" layoutY="347.0" onAction="#advancedDeletion" prefHeight="40.0" prefWidth="78.0" style="-fx-background-color: #ff5151;" text="Elimina" textAlignment="CENTER" textFill="WHITE" wrapText="true" AnchorPane.bottomAnchor="50.0" />
+      <JFXCheckBox fx:id="classiCheck" layoutX="20.0" layoutY="30.0" text="Classi" />
+      <JFXCheckBox fx:id="anniCheck" layoutX="169.0" layoutY="30.0" text="Anni Scolastici" />
+      <JFXCheckBox fx:id="alunniCheck" layoutX="320.0" layoutY="30.0" text="Alunni" />
+      <JFXCheckBox fx:id="giteCheck" layoutX="617.0" layoutY="30.0" text="Gite" />
+      <JFXTreeTableView fx:id="alunniTable" layoutX="306.0" layoutY="67.0" prefHeight="266.0" prefWidth="281.0" AnchorPane.bottomAnchor="117.0" AnchorPane.topAnchor="67.0" />
+   </children>
+</AnchorPane>

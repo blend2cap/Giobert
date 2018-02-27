@@ -23,8 +23,6 @@ public class Controller extends DBConnection implements Initializable, ChangeLis
 
 
     @FXML
-    private JFXButton deleteButton;
-    @FXML
     private JFXTextField cercaAlunno;
     @FXML
     private JFXTreeTableView<AlunnoForTable> myTable;
@@ -35,8 +33,6 @@ public class Controller extends DBConnection implements Initializable, ChangeLis
     @FXML
     private Label totale;
     @FXML
-    Menu fileMenu = new Menu();
-    @FXML
     MenuItem inserisciGita = new MenuItem();
     @FXML
     MenuItem inserisciClasse = new MenuItem();
@@ -44,18 +40,19 @@ public class Controller extends DBConnection implements Initializable, ChangeLis
     MenuItem inserisciAnno = new Menu();
     @FXML
     MenuItem inserisciAlunno = new MenuItem();
+    @FXML
+    MenuItem eliminaDati = new MenuItem();
 
-    ObservableList<String> elencoClassi;
-    ObservableList<String> elencoAnniScolastici;
-    ObservableList<String> autoCompletionList;
+    static ObservableList<String> elencoClassi;
+    static ObservableList<String> elencoAnniScolastici;
     static ObservableList<AlunnoForTable> alunni = FXCollections.observableArrayList();
+    private ObservableList<String> autoCompletionList;
 
     public Controller() throws SQLException, ClassNotFoundException {
         elencoClassi=getClassListForComboBox();
         elencoAnniScolastici=getAnniForComboBox();
         autoCompletionList=getCognome();
-        for (String gita:getGiteForCombo())
-            autoCompletionList.add(gita);
+        autoCompletionList.addAll(getGiteForCombo());
     }
 
 
@@ -68,6 +65,7 @@ public class Controller extends DBConnection implements Initializable, ChangeLis
         cercaAlunno.textProperty().addListener((observable, oldValue, newValue) ->
                 myTable.setPredicate(alunnoTreeItem -> alunnoTreeItem.getValue().Cognome.getValue().contains(newValue) ||
                                                        alunnoTreeItem.getValue().Gita.getValue().contains(newValue)));
+
         cercaAlunno.textProperty().addListener((observable, oldValue, newValue) -> {
             //calcolo totale spese
             Double tot=0.0;
@@ -122,7 +120,7 @@ public class Controller extends DBConnection implements Initializable, ChangeLis
 
     public void eliminaButton() throws SQLException, ClassNotFoundException {
         TreeItem<AlunnoForTable> selectedItem = myTable.getSelectionModel().getSelectedItem();
-        deleteAlunno(selectedItem.getValue());
+        deleteAlunnoFinal(selectedItem.getValue());
     }
 
     @FXML
@@ -177,6 +175,18 @@ public class Controller extends DBConnection implements Initializable, ChangeLis
         Parent root = loader.load();
         ControllerInserisci controllerMenuInserisci = loader.getController();
     }
+
+    public void EliminaDati() throws IOException {
+        Stage stage = new Stage();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("delOptions.fxml"));
+        stage.setScene(new Scene(FXMLLoader.load(getClass().getResource("delOptions.fxml"))));
+        stage.setTitle("Elimina Dati");
+        stage.setMaxWidth(820);
+        stage.show();
+        Parent root = loader.load();
+        ControllerElimina controllerElimina= loader.getController();
+    }
+
     @Override
     public void changed(ObservableValue observable, Object oldValue, Object newValue) {
         try {
