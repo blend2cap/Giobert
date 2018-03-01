@@ -243,8 +243,8 @@ public class DBConnection {
     public  void deleteAlunni(TreeItem<NameSurname> nameSurname) throws SQLException, ClassNotFoundException {
         if (con==null) getConnection();
         PreparedStatement del = con.prepareStatement("DELETE FROM Studenti WHERE nome=? AND cognome=?;");
-        del.setString(1, nameSurname.getValue().getName().toString());
-        del.setString(2, nameSurname.getValue().getSurname().toString());
+        del.setString(1, nameSurname.getValue().getName().getValue());
+        del.setString(2, nameSurname.getValue().getSurname().getValue());
         del.execute();
     }
     public void deleteGita(String gita) throws SQLException, ClassNotFoundException {
