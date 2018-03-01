@@ -4,6 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TreeItem;
+import jdk.nashorn.api.tree.Tree;
 import sample.Repositories.Alunno;
 import sample.Repositories.Gita;
 import sample.Repositories.NameSurname;
@@ -152,21 +153,12 @@ public class DBConnection {
 
     public void addStudenteDB (NameSurname nameSurname) throws SQLException, ClassNotFoundException {
         if (con==null)  getConnection();
-        PreparedStatement check = con.prepareStatement("SELECT id FROM Studenti WHERE nome=? AND cognome=?;");
-        check.setString(1, nameSurname.getName().toString());
-        check.setString(2, nameSurname.getSurname().toString());
-        ResultSet resultSet =check.executeQuery();
-        if (!resultSet.next()) {
+        //check if Student is already present in Final
+        if (findIdStudente(nameSurname).isEmpty()) {
             PreparedStatement preparedStatement=con.prepareStatement("INSERT INTO Studenti values(?,?,?);");
-            preparedStatement.setString(2, nameSurname.getName().toString());
-            preparedStatement.setString(3, nameSurname.getSurname().toString());
+            preparedStatement.setString(2, nameSurname.getName().getValue());
+            preparedStatement.setString(3, nameSurname.getSurname().getValue());
             preparedStatement.execute();
-        }
-        else
-        {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setContentText("Alunno già inserito");
-            alert.showAndWait();
         }
     }
 
@@ -187,8 +179,8 @@ public class DBConnection {
         if (con==null)  getConnection();
 
         PreparedStatement getIDStudente = con.prepareStatement("SELECT id FROM Studenti WHERE nome=? AND cognome=?;");
-        getIDStudente.setString(1, alunno.nomeCognome.getName().toString());
-        getIDStudente.setString(2, alunno.nomeCognome.getSurname().toString());
+        getIDStudente.setString(1, alunno.nomeCognome.getName().getValue());
+        getIDStudente.setString(2, alunno.nomeCognome.getSurname().getValue());
         ResultSet resultSetStudente = getIDStudente.executeQuery();
         String idStudente=resultSetStudente.getString("id");
 
@@ -215,16 +207,41 @@ public class DBConnection {
         preparedStatement.execute();
     }
 
-    public void deleteAlunnoFinal(AlunnoForTable alunno) throws SQLException, ClassNotFoundException {
+    public String findIdStudente(AlunnoForTable alunno) throws SQLException, ClassNotFoundException {
         if (con==null)  getConnection();
         PreparedStatement getIDStudente = con.prepareStatement("SELECT id FROM Studenti WHERE nome=? AND cognome=?;");
         getIDStudente.setString(1, alunno.getNome());
         getIDStudente.setString(2, alunno.getCognome());
         ResultSet resultSetStudente = getIDStudente.executeQuery();
         String idStudente=resultSetStudente.getString("id");
+        return idStudente;
+    }
+
+
+    public String findIdStudente(TreeItem<NameSurname> alunno) throws SQLException, ClassNotFoundException {
+        if (con==null)  getConnection();
+        PreparedStatement getIDStudente = con.prepareStatement("SELECT id FROM Studenti WHERE nome=? AND cognome=?;");
+        getIDStudente.setString(1,  alunno.getValue().getName().getValue());
+        getIDStudente.setString(2, alunno.getValue().getSurname().getValue());
+        ResultSet resultSetStudente = getIDStudente.executeQuery();
+        String idStudente=resultSetStudente.getString("id");
+        return idStudente;
+    }
+
+    public String findIdStudente (NameSurname nameSurname) throws SQLException {
+        PreparedStatement check = con.prepareStatement("SELECT id FROM Studenti WHERE nome=? AND cognome=?;");
+        check.setString(1, nameSurname.getName().getValue());
+        check.setString(2, nameSurname.getSurname().getValue());
+        ResultSet resultSetStudente = check.executeQuery();
+        String idStudente=resultSetStudente.getString("id");
+        return idStudente;
+    }
+
+    public void deleteAlunnoFinal(AlunnoForTable alunno) throws SQLException, ClassNotFoundException {
+        if (con==null)  getConnection();
 
         PreparedStatement delFinal=con.prepareStatement("DELETE FROM Final WHERE studenteID=?;");
-        delFinal.setString(1, idStudente);
+        delFinal.setString(1, findIdStudente(alunno));
         delFinal.execute();
     }
 
@@ -242,10 +259,14 @@ public class DBConnection {
     }
     public  void deleteAlunni(TreeItem<NameSurname> nameSurname) throws SQLException, ClassNotFoundException {
         if (con==null) getConnection();
-        PreparedStatement del = con.prepareStatement("DELETE FROM Studenti WHERE nome=? AND cognome=?;");
-        del.setString(1, nameSurname.getValue().getName().getValue());
-        del.setString(2, nameSurname.getValue().getSurname().getValue());
-        del.execute();
+        PreparedStatement delFromStudenti = con.prepareStatement("DELETE FROM Studenti WHERE nome=? AND cognome=?;");
+        delFromStudenti.setString(1, nameSurname.getValue().getName().getValue());
+        delFromStudenti.setString(2, nameSurname.getValue().getSurname().getValue());
+        delFromStudenti.execute();
+
+        PreparedStatement delFromFinal = con.prepareStatement("DELETE FROM Final WHERE studenteID=?;");
+        delFromFinal.setString(1, findIdStudente(nameSurname));
+        delFromFinal.execute();
     }
     public void deleteGita(String gita) throws SQLException, ClassNotFoundException {
         if (con==null) getConnection();

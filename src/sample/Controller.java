@@ -108,6 +108,7 @@ public class Controller extends DBConnection implements Initializable, ChangeLis
         myTable.setRoot(root);
         myTable.setShowRoot(false);
         myTable.getColumns().setAll(colonnaCognome, colonnaNome, colonnaClasse, colonnaGita, colonnaImporto, colonnaMese);
+        myTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         //end table
 
         //initialize ComboBoxes
@@ -198,7 +199,9 @@ public class Controller extends DBConnection implements Initializable, ChangeLis
             }
 
         } catch (SQLException | ClassNotFoundException e) {
+
             e.printStackTrace();
+
         }
 
     }

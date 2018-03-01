@@ -73,6 +73,7 @@ public class ControllerInserisci extends DBConnection implements Initializable {
                     alunno.classe, alunno.gita.getLocation(), alunno.gita.getCost(), alunno.gita.getMonth());
             Controller.alunni.add(alunnoForTable);
         } catch (Exception e){
+            e.printStackTrace();
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setContentText("Alunno non inserito!");
             alert.showAndWait();
